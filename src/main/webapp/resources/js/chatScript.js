@@ -1,5 +1,6 @@
 const url='http://localhost:8080';
 
+var addUserToChat=document.querySelector('#addUserToChat')
 var createRoomForm=document.querySelector('#createRoomForm')
 var choseRoomName=document.querySelector('#chooseRoomName')
 var openUserForm=document.querySelector('#openUserForm')
@@ -10,6 +11,8 @@ var messageToSend=document.querySelector('#message-to-send')
 var messageForm=document.querySelector('#messageForm')
 var listOfRoom = document.querySelector('#ChatList');
 var roomName = document.querySelector('#roomName');
+var studentName = document.querySelector('#studentName');
+var ChooseUserToAdd = document.querySelector('#addUserForm');
 var stompClient = null;
 var currentSubscription;
 
@@ -200,14 +203,27 @@ function sendMessage(event){
 function scrollToBottom() {
     $chatHistory.scrollTop($chatHistory[0].scrollHeight);
 }
-function addUserFormOpen(){//приделать окошко hiden и сделать появление и заполнение при нажатии
-    console.log("user form")
 
+function addUserFormOpen(){
+    ChooseUserToAdd.classList.remove('hidden');
+    stompClient.subscribe(`/app/chat/getUserList`, getUserToAdd);
+}
+function getUserToAdd(payload){
+    var user = JSON.parse(payload.body);
+    let usersTemplateHTML="";
+    for (let i = 0; i <user.length ; i++) {
+        usersTemplateHTML=usersTemplateHTML+'<option >'+user[i]+'</option>'
+    }
+    $('#student').html(usersTemplateHTML);
 }
 
 function addGroupFormOpen(){
     console.log("group form")
 
+}
+
+function addUserToChatFunction(){
+    var roomNameValue=studentName.value.trim();
 }
 
 $(document).ready(function (){
@@ -217,6 +233,7 @@ $(document).ready(function (){
     messageForm.addEventListener('submit',sendMessage,true)
     openUserForm.addEventListener('submit',addUserFormOpen,true)
     openGroupForm.addEventListener('submit',addGroupFormOpen,true)
+    addUserToChat.addEventListener('submit',addUserToChatFunction,true)
 })
 
 $(document).on('click', '.btn.btn-primary.join', function(event){

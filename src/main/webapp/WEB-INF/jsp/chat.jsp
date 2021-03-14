@@ -1,4 +1,5 @@
-<html lang="en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <head>
     <meta charset="UTF-8">
     <title>Custom messanger</title>
@@ -14,6 +15,14 @@
     <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/style.css">
 </head>
 <body>
+
+    <div id="addUserForm" class="hidden">
+        <form>
+            <input list="student" name="student" id="studentName">
+            <datalist id="student"></datalist>
+            <button type="submit" id="addUserToChat">Добавить</button>
+        </form>
+    </div>
 <div class="container clearfix">
     <div class="people-list" id="people-list">
         <div class="search">

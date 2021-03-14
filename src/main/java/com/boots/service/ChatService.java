@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.List;
@@ -27,6 +28,15 @@ public class ChatService {
     @Autowired
     PostfixRepository postfixRepository;
 
+    public List<String> getUsers(){
+
+        List<User> userList=userRepository.findAll();
+        List<String> answer=new ArrayList<>();
+        for (int i = 0; i <userList.size() ; i++) {
+            answer.add(userList.get(i).getUsername());
+        }
+        return answer;
+    }
     public ChatRoom findRoomByName(String name){
         return chatRoomRepository.findByRoomName(name);
     }

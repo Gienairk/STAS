@@ -193,11 +193,21 @@ ul {
 }
 .hidden{
     display: none;
+   ;
 }
 .chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
     font-size: 16px;
     color: gray;
     cursor: pointer;
+}
+
+#addUserForm{
+    position: absolute;
+    height: 30%;
+    width:  30%;
+    background: white;
+    margin: auto;
+
 }
 
 #addUser{

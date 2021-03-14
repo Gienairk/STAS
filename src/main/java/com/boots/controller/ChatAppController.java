@@ -74,11 +74,15 @@ public class ChatAppController {
     @SubscribeMapping("/chat/{chatRoom}/CreateRoom")
     public Boolean createRoom(@DestinationVariable String chatRoom)
     {
-        System.out.println("+++++++++"+chatRoom);
         if (chatService.findRoomByName(chatRoom)==null)
             return true;
         else
             return false;
+    }
+    @SubscribeMapping("/chat/getUserList")
+    public  List<String>getAllUser()
+    {
+       return chatService.getUsers();
     }
 
     @MessageMapping("/chat/rooms")
