@@ -203,6 +203,9 @@ ul {
 #addUser{
     float: left;
 }
+#addGroup{
+    float: left;
+}
 .chat .chat-message button {
     float: right;
     color: #94C2ED;

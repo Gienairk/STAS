@@ -46,7 +46,7 @@ public class ChatAppController {
         messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
     }
 
-    @MessageMapping("/chat/{roomId}/addUser")
+   /* @MessageMapping("/chat/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload Message chatMessage,SimpMessageHeaderAccessor headerAccessor) {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
         System.out.println(chatMessage.toString());
@@ -60,15 +60,25 @@ public class ChatAppController {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getFromLogin());
         addmessage(roomId,chatMessage);
         messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
-    }
+    }*/
 
 
-    @SubscribeMapping("/chat/rooms")
+   /* @SubscribeMapping("/chat/rooms")
     public List<ChatRoom> listOfRoom()
     {
 
         //System.out.println("Rooms: "+rooms.size());
         return rooms;
+    }*/
+
+    @SubscribeMapping("/chat/{chatRoom}/CreateRoom")
+    public Boolean createRoom(@DestinationVariable String chatRoom)
+    {
+        System.out.println("+++++++++"+chatRoom);
+        if (chatService.findRoomByName(chatRoom)==null)
+            return true;
+        else
+            return false;
     }
 
     @MessageMapping("/chat/rooms")

@@ -62,7 +62,12 @@
                 <textarea id="message-to-send" name="message-to-send" placeholder="Type your message" rows="3"></textarea>
                 <button id="sendBtn" type="submit">Send</button>
             </form>
-            <button id="addUser">add user</button>
+            <form id="openUserForm" name="openUserForm">
+            <button id="addUser" type="submit">add user</button>
+                </form>
+            <form id="openGroupForm" name="openGroupForm">
+                <button id="addGroup" type="submit">add group</button>
+            </form>
         </div> <!-- end chat-message -->
 
     </div> <!-- end chat -->

@@ -27,6 +27,9 @@ public class ChatService {
     @Autowired
     PostfixRepository postfixRepository;
 
+    public ChatRoom findRoomByName(String name){
+        return chatRoomRepository.findByRoomName(name);
+    }
     public void saveMessage(String roomName, Message message){
         Date date=new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
