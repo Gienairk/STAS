@@ -1,17 +1,18 @@
 const url='http://localhost:8080';
 
-var addUserToChat=document.querySelector('#addUserToChat')
 var createRoomForm=document.querySelector('#createRoomForm')
+
 var choseRoomName=document.querySelector('#chooseRoomName')
-var openUserForm=document.querySelector('#openUserForm')
-var openGroupForm=document.querySelector('#openGroupForm')
 var refreshRoom=document.querySelector('#refreshRoom')
 var chatWith=document.querySelector('#chatWith')
+
 var messageToSend=document.querySelector('#message-to-send')
 var messageForm=document.querySelector('#messageForm')
-var listOfRoom = document.querySelector('#ChatList');
+
+var userToAdd=document.querySelector('#studentName')
+
+
 var roomName = document.querySelector('#roomName');
-var studentName = document.querySelector('#studentName');
 var ChooseUserToAdd = document.querySelector('#addUserForm');
 var stompClient = null;
 var currentSubscription;
@@ -76,19 +77,6 @@ function onConnected() {
     listRoom();
 }
 
-/*function createRoom(event){
-    var roomNameValue=roomName.value.trim();
-
-    if (roomNameValue){
-        var chatRoom={
-            roomName:roomNameValue
-        };
-        stompClient.send('/app/chat/rooms',{},JSON.stringify(chatRoom));
-        setTimeout(() => enterRoom(roomNameValue), 200);
-    }
-    createRoomForm.classList.add('hidden')
-    event.preventDefault();
-}*/
 function createRoom(event){
     var roomNameValue=roomName.value.trim();
 
@@ -98,13 +86,14 @@ function createRoom(event){
     createRoomForm.classList.add('hidden')
     event.preventDefault();
 }
+
 function getAnswerRoom(payload){
     var message = JSON.parse(payload.body);
     console.log(message)
     if (message)
         enterRoom(roomName.value.trim())
     else
-        alert("This chat exists ")
+        alert("This chat already exists ")
 }
 
 function enterRoom(newRoomId){
@@ -223,7 +212,14 @@ function addGroupFormOpen(){
 }
 
 function addUserToChatFunction(){
-    var roomNameValue=studentName.value.trim();
+    var userToAddValue=userToAdd.value.trim();
+    console.log(userToAddValue);
+    console.log(roomId);
+    var data={
+        roomName:roomId,
+    };
+    stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
+    ChooseUserToAdd.classList.add('hidden');
 }
 
 $(document).ready(function (){
@@ -231,9 +227,6 @@ $(document).ready(function (){
     createRoomForm.addEventListener('submit',createRoom,true)
     choseRoomName.addEventListener('submit',chooseChatName,true)
     messageForm.addEventListener('submit',sendMessage,true)
-    openUserForm.addEventListener('submit',addUserFormOpen,true)
-    openGroupForm.addEventListener('submit',addGroupFormOpen,true)
-    addUserToChat.addEventListener('submit',addUserToChatFunction,true)
 })
 
 $(document).on('click', '.btn.btn-primary.join', function(event){

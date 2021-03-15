@@ -17,11 +17,9 @@
 <body>
 
     <div id="addUserForm" class="hidden">
-        <form>
-            <input list="student" name="student" id="studentName">
+            <input list="student" name="studentName" id="studentName">
             <datalist id="student"></datalist>
-            <button type="submit" id="addUserToChat">Добавить</button>
-        </form>
+            <button  id="addUserToChat" onclick="addUserToChatFunction()">Добавить</button>
     </div>
 <div class="container clearfix">
     <div class="people-list" id="people-list">
@@ -71,14 +69,10 @@
                 <textarea id="message-to-send" name="message-to-send" placeholder="Type your message" rows="3"></textarea>
                 <button id="sendBtn" type="submit">Send</button>
             </form>
-            <form id="openUserForm" name="openUserForm">
-            <button id="addUser" type="submit">add user</button>
-                </form>
-            <form id="openGroupForm" name="openGroupForm">
-                <button id="addGroup" type="submit">add group</button>
-            </form>
-        </div> <!-- end chat-message -->
+            <button id="addUser" onclick="addUserFormOpen()" >add user</button>
+            <button id="addGroup" onclick="addGroupFormOpen()">add group</button>
 
+        </div> <!-- end chat-message -->
     </div> <!-- end chat -->
 
 </div> <!-- end container -->

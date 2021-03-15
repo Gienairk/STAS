@@ -71,11 +71,15 @@ public class ChatAppController {
         return rooms;
     }*/
 
+
     @SubscribeMapping("/chat/{chatRoom}/CreateRoom")
     public Boolean createRoom(@DestinationVariable String chatRoom)
     {
-        if (chatService.findRoomByName(chatRoom)==null)
+        if (chatService.findRoomByName(chatRoom)==null){
+            chatService.saveRoom(new ChatRoom(chatRoom));
+            messagingTemplate.convertAndSend("/topic/list", rooms);
             return true;
+        }
         else
             return false;
     }
@@ -85,12 +89,13 @@ public class ChatAppController {
        return chatService.getUsers();
     }
 
-    @MessageMapping("/chat/rooms")
+    /*@MessageMapping("/chat/rooms")
     public void addRoom(@Payload ChatRoom chatRoom)
     {
+        System.out.println("+++++++++++++++++++++++++++++++++++"+chatRoom);
         chatService.saveRoom(chatRoom);
         messagingTemplate.convertAndSend("/topic/list", rooms);
-    }
+    }*/
 
     @MessageMapping("/chat/rooms/{userName}")
     public void addUserToRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
