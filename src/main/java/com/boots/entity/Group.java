@@ -41,12 +41,8 @@ public class Group {
     public String toString() {
         return "Group{" +
                 "id=" + id +
-                ", groupNumber='" + number + '\'' +
-                ", courseNumber=" + courseNumber +
-                ", users=" + users +
-                ", postfixId=" + postfixId +
-                ", departmentId=" + departmentId +
-                ", subjects=" + subjects +
+                ", full name='" + fullname + '\'' +
+
                 '}';
     }
     public String toStringForPage() {

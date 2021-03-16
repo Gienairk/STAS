@@ -201,14 +201,7 @@ ul {
     cursor: pointer;
 }
 
-#addUserForm{
-    position: absolute;
-    height: 30%;
-    width:  30%;
-    background: white;
-    margin: auto;
 
-}
 
 #addUser{
     float: left;

@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String userRight;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles=new HashSet<>();
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Group> groups=new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Department> departments=new HashSet<>();

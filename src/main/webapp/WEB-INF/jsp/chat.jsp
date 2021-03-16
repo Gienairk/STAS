@@ -21,6 +21,11 @@
             <datalist id="student"></datalist>
             <button  id="addUserToChat" onclick="addUserToChatFunction()">Добавить</button>
     </div>
+    <div id="addGroupForm" class="hidden">
+        <input list="group" name="groupName" id="groupName">
+        <datalist id="group"></datalist>
+        <button  id="addGroupToChat" onclick="addGroupToChatFunction()">Добавить</button>
+    </div>
 <div class="container clearfix">
     <div class="people-list" id="people-list">
         <div class="search">

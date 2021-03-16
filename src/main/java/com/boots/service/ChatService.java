@@ -27,6 +27,8 @@ public class ChatService {
     MessageRepository messageRepository;
     @Autowired
     PostfixRepository postfixRepository;
+    @Autowired
+    GroupRepository groupRepository;
 
     public List<String> getUsers(){
 
@@ -37,6 +39,16 @@ public class ChatService {
         }
         return answer;
     }
+
+    public List<String> getGroup() {
+        List<Group> groupList=groupRepository.findAll();
+        List<String> answer=new ArrayList<>();
+        for (int i = 0; i <groupList.size() ; i++) {
+            answer.add(groupList.get(i).getFullname());
+        }
+        return answer;
+    }
+
     public ChatRoom findRoomByName(String name){
         return chatRoomRepository.findByRoomName(name);
     }
@@ -53,14 +65,20 @@ public class ChatService {
     }
 
     public void saveUser(String room,String user){
-        System.out.println("room "+ room);
-        System.out.println("user "+ user);
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
         User userObj=userRepository.findByUsername(user);
-        System.out.println("roomObj "+chatRoom);
-        System.out.println("userObj "+userObj);
         userObj.addChatRoom(chatRoom);
         userRepository.save(userObj);
+
+    }
+    public void saveGroup(String group,String room){
+        System.out.println("room "+ room);
+        System.out.println("group "+ group);
+        Group groups=groupRepository.findByFullname(group);
+        List<User> userSet=userRepository.findAllByGroups(groups);
+        for (int i = 0; i <userSet.size() ; i++) {
+            saveUser(room,userSet.get(i).getUsername());
+        }
 
     }
 
@@ -83,4 +101,6 @@ public class ChatService {
         List<ChatRoom> test=List.copyOf(chatRooms);
         return test;
     }
+
+
 }

@@ -88,6 +88,11 @@ public class ChatAppController {
     {
        return chatService.getUsers();
     }
+    @SubscribeMapping("/chat/getGroupList")
+    public  List<String>getGroupList()
+    {
+        return chatService.getGroup();
+    }
 
     /*@MessageMapping("/chat/rooms")
     public void addRoom(@Payload ChatRoom chatRoom)
@@ -100,16 +105,22 @@ public class ChatAppController {
     @MessageMapping("/chat/rooms/{userName}")
     public void addUserToRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
         chatService.saveUser(chatRoom.getRoomName(),userName);
-
     }
+
+    @MessageMapping("/chat/rooms/{groupName}/addGroup")
+    public void addGroupToRoom(@DestinationVariable String groupName,@Payload ChatRoom chatRoom){
+        System.out.println("+++++++++++++++");
+        System.out.println(groupName);
+        System.out.println(chatRoom.getRoomName());
+        System.out.println("+++++++++++++++");
+
+        chatService.saveGroup(groupName,chatRoom.getRoomName());
+    }
+
     @MessageMapping("/chat/{roomId}/leaveuser")
     public void leaveRoom(@DestinationVariable String roomId, @Payload Message chatMessage,SimpMessageHeaderAccessor headerAccessor)
     {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
-        System.out.println("---------------------------");
-        System.out.println(roomId);
-        System.out.println(chatMessage.toString());
-        System.out.println("---------------------------");
         if (currentRoomId != null) {
             Message leaveMessage = new Message();
             leaveMessage.setType(Message.MessageType.LEAVE);

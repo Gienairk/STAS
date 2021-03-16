@@ -10,10 +10,11 @@ var messageToSend=document.querySelector('#message-to-send')
 var messageForm=document.querySelector('#messageForm')
 
 var userToAdd=document.querySelector('#studentName')
-
+var groupToAdd=document.querySelector('#groupName')
 
 var roomName = document.querySelector('#roomName');
 var ChooseUserToAdd = document.querySelector('#addUserForm');
+var ChooseGroupToAdd = document.querySelector('#addGroupForm');
 var stompClient = null;
 var currentSubscription;
 
@@ -206,11 +207,33 @@ function getUserToAdd(payload){
     $('#student').html(usersTemplateHTML);
 }
 
-function addGroupFormOpen(){
-    console.log("group form")
+function getGroupToAdd(payload){
+    var group = JSON.parse(payload.body);
 
+    let usersTemplateHTML="";
+    for (let i = 0; i <group.length ; i++) {
+        usersTemplateHTML=usersTemplateHTML+'<option >'+group[i]+'</option>'
+        console.log(group[i])
+    }
+    console.log(usersTemplateHTML);
+    $('#group').html(usersTemplateHTML);
 }
 
+function addGroupFormOpen(){
+    ChooseGroupToAdd.classList.remove('hidden');
+    stompClient.subscribe(`/app/chat/getGroupList`, getGroupToAdd);
+}
+
+function addGroupToChatFunction(){
+    var groupToAddvalue=groupToAdd.value.trim();
+    console.log(groupToAddvalue);
+    console.log(roomId);
+    var data={
+        roomName:roomId,
+    };
+    stompClient.send(`/app/chat/rooms/${groupToAddvalue}/addGroup`,{},JSON.stringify(data));
+    ChooseGroupToAdd.classList.add('hidden');
+}
 function addUserToChatFunction(){
     var userToAddValue=userToAdd.value.trim();
     console.log(userToAddValue);
