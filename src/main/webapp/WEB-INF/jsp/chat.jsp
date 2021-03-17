@@ -33,10 +33,8 @@
                 <a id="userName"   type="text"></a>
                 <button onclick="">Create chat</button>
             </form>
-            <form id="refreshRoom" name="refreshRoom">
-                <a id="refreshR"   type="text"></a>
-                <button onclick="">Refresh room</button>
-            </form>
+                <button onclick="listRoom()">Refresh room</button>
+
         </div>
         <ul id="ChatList"class="list">
         </ul>
@@ -47,6 +45,7 @@
 
 
             <div  class="chat-about">
+                <button onclick="leaveFromRoom()">Выйти</button>
                 <div id="chatWith" class="chat-with">Chat with ...</div>
                 <div class="chat-num-messages"></div>
             </div>

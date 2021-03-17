@@ -107,6 +107,11 @@ public class ChatAppController {
         chatService.saveUser(chatRoom.getRoomName(),userName);
     }
 
+    @MessageMapping("/chat/roomsLeave/{userName}")
+    public void deleteUserFromRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
+        chatService.leavefromRoom(chatRoom.getRoomName(),userName);
+    }
+
     @MessageMapping("/chat/rooms/{groupName}/addGroup")
     public void addGroupToRoom(@DestinationVariable String groupName,@Payload ChatRoom chatRoom){
         System.out.println("+++++++++++++++");

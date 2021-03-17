@@ -3,7 +3,7 @@ const url='http://localhost:8080';
 var createRoomForm=document.querySelector('#createRoomForm')
 
 var choseRoomName=document.querySelector('#chooseRoomName')
-var refreshRoom=document.querySelector('#refreshRoom')
+
 var chatWith=document.querySelector('#chatWith')
 
 var messageToSend=document.querySelector('#message-to-send')
@@ -246,11 +246,23 @@ function addUserToChatFunction(){
 }
 
 $(document).ready(function (){
-    refreshRoom.addEventListener('submit',listRoom,true)
+   // refreshRoom.addEventListener('submit',listRoom,true)
     createRoomForm.addEventListener('submit',createRoom,true)
     choseRoomName.addEventListener('submit',chooseChatName,true)
     messageForm.addEventListener('submit',sendMessage,true)
 })
+
+function leaveFromRoom(){
+    console.log(roomId)
+    var data={
+        roomName:roomId,
+    };
+    stompClient.send(`/app/chat/roomsLeave/${userName}`,{},JSON.stringify(data));
+    chatCleaner()
+    chatWith.textContent="Chat with ...";
+    currentSubscription.unsubscribe();
+    listRoom()
+}
 
 $(document).on('click', '.btn.btn-primary.join', function(event){
     var roomNameValue = $(this).attr('value');
@@ -260,5 +272,6 @@ $(document).on('click', '.btn.btn-primary.join', function(event){
     }
     event.preventDefault();
 });
+
 
 init();

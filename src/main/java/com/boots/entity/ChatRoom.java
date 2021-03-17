@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 
 @Table(name = "t_chatRoom" )
@@ -36,6 +38,7 @@ public class ChatRoom implements Serializable
         return roomName;
     }
 
+
     public void setRoomName(String roomid) {
         this.roomName = roomid;
     }
@@ -67,5 +70,19 @@ public class ChatRoom implements Serializable
 
 
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChatRoom)) return false;
+        ChatRoom chatRoom = (ChatRoom) o;
+        return getId().equals(chatRoom.getId()) &&
+                getRoomName().equals(chatRoom.getRoomName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRoomName());
     }
 }

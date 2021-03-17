@@ -71,6 +71,17 @@ public class ChatService {
         userRepository.save(userObj);
 
     }
+    public void leavefromRoom(String room,String user){
+        User user1=userRepository.findByUsername(user);
+        ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
+        System.out.println("++++++++++++++++");
+        System.out.println(user1.getChatRooms());
+        System.out.println("++++++++++++++++");
+        user1.leaveFromRoom(chatRoom);
+        System.out.println(user1.getChatRooms());
+        System.out.println("++++++++++++++++");
+        userRepository.save(user1);
+    }
     public void saveGroup(String group,String room){
         System.out.println("room "+ room);
         System.out.println("group "+ group);

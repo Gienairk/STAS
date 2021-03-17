@@ -67,6 +67,10 @@ public class User implements UserDetails {
         this.chatRooms = chatRooms;
     }
 
+    public void leaveFromRoom(ChatRoom chatRoom){
+        this.chatRooms.remove(chatRoom);
+    }
+
     @Override
     public String getPassword() {
         return password;
