@@ -1,6 +1,7 @@
 package com.boots.service;
 
 
+import com.boots.controller.ChatAppController;
 import com.boots.entity.*;
 
 import com.boots.repository.*;
@@ -29,6 +30,8 @@ public class ChatService {
     PostfixRepository postfixRepository;
     @Autowired
     GroupRepository groupRepository;
+    @Autowired
+    ChatAppController chatAppController;
 
     public List<String> getUsers(){
 
@@ -87,8 +90,11 @@ public class ChatService {
         System.out.println("group "+ group);
         Group groups=groupRepository.findByFullname(group);
         List<User> userSet=userRepository.findAllByGroups(groups);
+        String name="";
         for (int i = 0; i <userSet.size() ; i++) {
-            saveUser(room,userSet.get(i).getUsername());
+            name=userSet.get(i).getUsername();
+            chatAppController.updateRoom(name,room);
+            saveUser(room,name);
         }
 
     }

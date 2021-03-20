@@ -27,6 +27,8 @@ public class ChatAppController {
     ChatService chatService;
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplateTest;
 
 
     List<ChatRoom> rooms;
@@ -43,6 +45,8 @@ public class ChatAppController {
         chatService.saveMessage(roomId,chatMessage);
         System.out.println("saveMessage end");
         addmessage(roomId,chatMessage);
+
+       // messagingTemplateTest.convertAndSend("/topic/chat/"+chatMessage.getFromLogin() , "message");//topic ****
         messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
     }
 
@@ -77,7 +81,7 @@ public class ChatAppController {
     {
         if (chatService.findRoomByName(chatRoom)==null){
             chatService.saveRoom(new ChatRoom(chatRoom));
-            messagingTemplate.convertAndSend("/topic/list", rooms);
+            //messagingTemplate.convertAndSend("/topic/list", rooms);
             return true;
         }
         else
@@ -107,9 +111,20 @@ public class ChatAppController {
         chatService.saveUser(chatRoom.getRoomName(),userName);
     }
 
+
+
     @MessageMapping("/chat/roomsLeave/{userName}")
     public void deleteUserFromRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
         chatService.leavefromRoom(chatRoom.getRoomName(),userName);
+    }
+
+    @MessageMapping("chat/updateRoom/{userName}")
+    public void updateRoom(@DestinationVariable String userName,@Payload String chatRoomname){
+        System.out.println("===============");
+        System.out.println("userName= "+userName);
+        System.out.println("chatRoomname= "+chatRoomname);
+        System.out.println("===============");
+        messagingTemplateTest.convertAndSend("/topic/chat/"+userName , chatRoomname);
     }
 
     @MessageMapping("/chat/rooms/{groupName}/addGroup")
@@ -118,8 +133,9 @@ public class ChatAppController {
         System.out.println(groupName);
         System.out.println(chatRoom.getRoomName());
         System.out.println("+++++++++++++++");
-
         chatService.saveGroup(groupName,chatRoom.getRoomName());
+
+
     }
 
     @MessageMapping("/chat/{roomId}/leaveuser")

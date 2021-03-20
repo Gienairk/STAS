@@ -15,8 +15,13 @@ var groupToAdd=document.querySelector('#groupName')
 var roomName = document.querySelector('#roomName');
 var ChooseUserToAdd = document.querySelector('#addUserForm');
 var ChooseGroupToAdd = document.querySelector('#addGroupForm');
+
 var stompClient = null;
 var currentSubscription;
+var chatSubscription;
+
+var roomClient=null;
+var roomSubscription;
 
 var userName = null;
 var roomId = null;
@@ -42,20 +47,53 @@ window.onload = function() {
         userName=response;
         $('#userName').append(userName)
         var socket = new SockJS('/chat');
+        var socketRoom = new SockJS('/room');
         stompClient = Stomp.over(socket);
-        stompClient.connect({},onConnected,onError);
+        stompClient.connect({},stompClientConnected,onError);
+        roomClient=Stomp.over(socketRoom);
+        roomClient.connect({},roomClientConnected,onError);
     })
 }
 
-function listRoom()
-{
+function listRoom() {
     stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom);
+    //chatSubscription=stompClient.subscribe(`/app/${userName}/chatList`)
+    //currentSubscription=stompClient.subscribe(`/topic/${roomId}`,onMessageReceived);
+}
+
+function stompClientConnected() {
+    console.log("start stompClient")
+    listRoom()
+}
+
+function updateRoom(payload){
+    console.log(payload)
+    var room = payload.body;
+    console.log(room)
+    let usersTemplateHTML='<a href="#" onclick="enterRoom(\''+room+'\')" <li class="clearfix">\n' +
+        '                <div class="about">\n' +
+        '                     <div id="userNameAppender_' + room + '" class="name">' + room + '</div>\n' +
+        '                    <div class="status">\n' +
+        '                        <i class="fa fa-circle online"></i>\n' +
+        '                    </div>\n' +
+        '                </div>\n' +
+        '            </li></a>'+$('#ChatList').html();
+    $('#ChatList').html(usersTemplateHTML);
+}
+
+function updateRoomList(username,roomname){
+    stompClient.send(`/app/chat/updateRoom/${username}`,{},JSON.stringify(roomname));
+}
+
+function roomClientConnected() {
+    console.log("start roomClient")
+    roomSubscription=roomClient.subscribe(`/topic/chat/`+userName, updateRoom);
 }
 
 function onListofRoom(payload) {
     var listRoom = JSON.parse(payload.body);
     let usersTemplateHTML="";
-    for (let i=0; i<listRoom.length;i++){//сделать переход в чат и контроль при создании , selectUser глянуть 
+    for (let i=0; i<listRoom.length;i++){//сделать переход в чат и контроль при создании , selectUser глянуть
         usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+listRoom[i]+'\')" <li class="clearfix">\n' +
             '                <div class="about">\n' +
             '                     <div id="userNameAppender_' + listRoom[i] + '" class="name">' + listRoom[i] + '</div>\n' +
@@ -73,10 +111,6 @@ function onError(error) {
     connectingElement.style.color = 'red';
 }
 
-function onConnected() {
-    console.log("start")
-    listRoom();
-}
 
 function createRoom(event){
     var roomNameValue=roomName.value.trim();
@@ -88,13 +122,18 @@ function createRoom(event){
     event.preventDefault();
 }
 
+
 function getAnswerRoom(payload){
     var message = JSON.parse(payload.body);
     console.log(message)
-    if (message)
+    if (message){
+        updateRoomList(userName,roomName.value.trim())
         enterRoom(roomName.value.trim())
-    else
+    }
+
+    else{
         alert("This chat already exists ")
+    }
 }
 
 function enterRoom(newRoomId){
@@ -111,6 +150,20 @@ function enterRoom(newRoomId){
     }
     stompClient.subscribe(`/app/chat/${roomId}/getPrevious`, onPreviousMessage);
     currentSubscription=stompClient.subscribe(`/topic/${roomId}`,onMessageReceived);
+}
+
+function sendMessage(event){
+    var messageContent=messageToSend.value.trim();
+    if (messageContent && stompClient){
+        var chatMessage={
+            fromLogin: userName,
+            message:messageToSend.value,
+            type: 'CHAT'
+        };
+        stompClient.send(`${topic}/sendMessage`, {}, JSON.stringify(chatMessage));
+    }
+    messageToSend.value='';
+    event.preventDefault();
 }
 
 function onPreviousMessage(payload) {
@@ -176,20 +229,6 @@ function chooseChatName(event){
     event.preventDefault();
 }
 
-function sendMessage(event){
-    var messageContent=messageToSend.value.trim();
-    if (messageContent && stompClient){
-        var chatMessage={
-            fromLogin: userName,
-            message:messageToSend.value,
-            type: 'CHAT'
-        };
-        stompClient.send(`${topic}/sendMessage`, {}, JSON.stringify(chatMessage));
-    }
-    messageToSend.value='';
-    event.preventDefault();
-}
-
 function scrollToBottom() {
     $chatHistory.scrollTop($chatHistory[0].scrollHeight);
 }
@@ -241,7 +280,9 @@ function addUserToChatFunction(){
     var data={
         roomName:roomId,
     };
+    updateRoomList(userToAddValue,roomId)
     stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
+
     ChooseUserToAdd.classList.add('hidden');
 }
 
@@ -261,7 +302,7 @@ function leaveFromRoom(){
     chatCleaner()
     chatWith.textContent="Chat with ...";
     currentSubscription.unsubscribe();
-    listRoom()
+    //listRoom()
 }
 
 $(document).on('click', '.btn.btn-primary.join', function(event){
