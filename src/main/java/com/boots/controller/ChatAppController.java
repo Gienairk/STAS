@@ -44,10 +44,13 @@ public class ChatAppController {
         System.out.println("saveMessage start");
         chatService.saveMessage(roomId,chatMessage);
         System.out.println("saveMessage end");
-        addmessage(roomId,chatMessage);
-
-       // messagingTemplateTest.convertAndSend("/topic/chat/"+chatMessage.getFromLogin() , "message");//topic ****
+        //addmessage(roomId,chatMessage);
         messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
+        chatService.messegeDelivery(roomId);
+       // messagingTemplate.convertAndSend(format("/topic/newMessage/%s", "admin"), chatMessage);
+    }
+    public void sendAwardaboutMessage(String username, String roomName){
+        messagingTemplate.convertAndSend(format("/topic/newMessage/%s", username), roomName);
     }
 
    /* @MessageMapping("/chat/{roomId}/addUser")
@@ -138,7 +141,7 @@ public class ChatAppController {
 
     }
 
-    @MessageMapping("/chat/{roomId}/leaveuser")
+    /*@MessageMapping("/chat/{roomId}/leaveuser")
     public void leaveRoom(@DestinationVariable String roomId, @Payload Message chatMessage,SimpMessageHeaderAccessor headerAccessor)
     {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
@@ -146,14 +149,13 @@ public class ChatAppController {
             Message leaveMessage = new Message();
             leaveMessage.setType(Message.MessageType.LEAVE);
             leaveMessage.setFromLogin(chatMessage.getFromLogin());
-            addmessage(currentRoomId,chatMessage);
+            //addmessage(currentRoomId,chatMessage);
             messagingTemplate.convertAndSend(format("/topic/%s", currentRoomId), leaveMessage);
         }
-    }
+    }*/
 
-
-    private void addmessage(String roomid, Message message)
-    {
+/*
+    private void addmessage(String roomid, Message message) {
         for(ChatRoom room: rooms)
         {
             if(room.getRoomName().equals(roomid))
@@ -165,7 +167,7 @@ public class ChatAppController {
             }
         }
     }
-
+*/
     @SubscribeMapping("chat/{roomId}/getPrevious")
     public List<Message> getPreviousMessages(@DestinationVariable String roomId)
     {

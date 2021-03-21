@@ -201,7 +201,9 @@ ul {
     cursor: pointer;
 }
 
-
+.newMessage{
+    background: red;
+}
 
 #addUser{
     float: left;

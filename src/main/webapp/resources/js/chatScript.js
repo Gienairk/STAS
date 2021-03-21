@@ -18,10 +18,13 @@ var ChooseGroupToAdd = document.querySelector('#addGroupForm');
 
 var stompClient = null;
 var currentSubscription;
-var chatSubscription;
+
 
 var roomClient=null;
 var roomSubscription;
+
+var messageClient=null;
+var messageSubscription;
 
 var userName = null;
 var roomId = null;
@@ -48,10 +51,13 @@ window.onload = function() {
         $('#userName').append(userName)
         var socket = new SockJS('/chat');
         var socketRoom = new SockJS('/room');
+        var socketMessage = new SockJS('/message');
         stompClient = Stomp.over(socket);
         stompClient.connect({},stompClientConnected,onError);
         roomClient=Stomp.over(socketRoom);
         roomClient.connect({},roomClientConnected,onError);
+        messageClient=Stomp.over(socketMessage)
+        messageClient.connect({},messageClientConnected,onError);
     })
 }
 
@@ -83,6 +89,20 @@ function updateRoom(payload){
 
 function updateRoomList(username,roomname){
     stompClient.send(`/app/chat/updateRoom/${username}`,{},JSON.stringify(roomname));
+}
+
+function messageClientConnected(){
+    messageSubscription=messageClient.subscribe(`/topic/newMessage/`+userName, messageRecover);
+}
+function messageRecover(payload){
+    console.log(payload.body)
+    var whatChat=payload.body;
+    let elem=document.getElementById('userNameAppender_'+whatChat)
+    console.log(roomId)
+    console.log(whatChat)
+    if (roomId!=whatChat) {
+        elem.classList.add('newMessage');
+    }
 }
 
 function roomClientConnected() {
@@ -145,6 +165,9 @@ function enterRoom(newRoomId){
     roomId=newRoomId;
     chatWith.textContent=newRoomId;
     topic = `/app/chat/${newRoomId}`;
+
+    let elem=document.getElementById('userNameAppender_'+newRoomId)
+    elem.classList.remove('newMessage')
     if (currentSubscription){
         currentSubscription.unsubscribe();
     }
@@ -193,6 +216,8 @@ function formatDate(date) {
 
     var hh=date.getHours()
     var min=date.getMinutes()
+    if (min=="0")
+        min="00"
     return hh+":"+min+" "+dd + '.' + mm + '.' + yy ;
 }
 
@@ -302,7 +327,9 @@ function leaveFromRoom(){
     chatCleaner()
     chatWith.textContent="Chat with ...";
     currentSubscription.unsubscribe();
-    //listRoom()
+    roomId=null;
+    setTimeout(() => stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom), 50);
+
 }
 
 $(document).on('click', '.btn.btn-primary.join', function(event){

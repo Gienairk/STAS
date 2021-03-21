@@ -66,6 +66,14 @@ public class ChatService {
         System.out.println("message "+ message);
         messageRepository.save(localMessage);
     }
+    public void messegeDelivery(String roomName){
+        ChatRoom chatRoom=chatRoomRepository.findByRoomName(roomName);
+        List<User> userList=userRepository.findAllByChatRooms(chatRoom);
+        for (int i = 0; i <userList.size() ; i++) {
+           chatAppController.sendAwardaboutMessage(userList.get(i).getUsername(),roomName);
+        }
+
+    }
 
     public void saveUser(String room,String user){
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
