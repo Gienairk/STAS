@@ -3,6 +3,7 @@ package com.boots.controller;
 
 import com.boots.entity.ChatRoom;
 import com.boots.entity.Message;
+import com.boots.entity.User;
 import com.boots.service.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,11 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.String.format;
 @Controller
@@ -34,10 +38,13 @@ public class ChatAppController {
     List<ChatRoom> rooms;
 
 
-    @MessageMapping("/test")
-    public void test(){
-        System.out.println("============= я в тесте! ==================");
-
+    @MessageMapping("/changeChat/{userName}")
+    public void test(@DestinationVariable String userName, @Payload String chatName){
+        Date date=new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+        String newFomart = formatter.format(date);
+        //System.out.println(userName+" "+ chatName+" "+newFomart);
+        chatService.saveTimeData(newFomart,userName,chatName);
     }
 
     @Autowired
@@ -118,6 +125,7 @@ public class ChatAppController {
 
     @MessageMapping("/chat/rooms/{userName}")
     public void addUserToRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
+
         chatService.saveUser(chatRoom.getRoomName(),userName);
     }
 
@@ -187,14 +195,16 @@ public class ChatAppController {
     }
 
     @SubscribeMapping("chat/{userName}/getChats")
-    public List<String> getUserRoom(@DestinationVariable String userName)
+    public  Map<String,Boolean> getUserRoom(@DestinationVariable String userName)
     {
-        List<ChatRoom> test= chatService.UserRoom(userName);
+        /*List<ChatRoom> test= chatService.UserRoom(userName);
         List<String> name=new ArrayList<>();
         for (int i = 0; i < test.size(); i++) {
             name.add(test.get(i).getRoomName());
         }
-        return name;
+        return name;*/
+        Map<String,Boolean> test= chatService.UserRoom(userName);
+        return test;
     }
 
 }

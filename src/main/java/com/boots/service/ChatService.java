@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -54,6 +57,7 @@ public class ChatService {
     public ChatRoom findRoomByName(String name){
         return chatRoomRepository.findByRoomName(name);
     }
+
     public void saveMessage(String roomName, Message message){
         Date date=new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
@@ -64,6 +68,13 @@ public class ChatService {
         System.out.println("localMessage "+ localMessage);
         System.out.println("message "+ message);
         messageRepository.save(localMessage);
+    }
+    public void saveTimeData(String time,String userName,String chatName){
+        User user=userRepository.findByUsername(userName);
+        ChatRoom chatRoom=chatRoomRepository.findByRoomName(chatName);
+        UserChatRoom userChatRoom=userChatRoomRepository.getByChatRoomAndUser(chatRoom,user);
+        userChatRoom.setTime(time);
+        userChatRoomRepository.save(userChatRoom);
     }
     public void messegeDelivery(String roomName){
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(roomName);
@@ -97,13 +108,14 @@ public class ChatService {
     public void leavefromRoom(String room,String user){
         User user1=userRepository.findByUsername(user);
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
+        UserChatRoom userChatRoom=userChatRoomRepository.getByChatRoomAndUser(chatRoom,user1);
         /*System.out.println("++++++++++++++++");
         System.out.println(user1.getChatRooms());
         System.out.println("++++++++++++++++");
         user1.leaveFromRoom(chatRoom);
         System.out.println(user1.getChatRooms());
         System.out.println("++++++++++++++++");*/
-        userRepository.save(user1);
+        userChatRoomRepository.delete(userChatRoom);
     }
     public void saveGroup(String group,String room){
         System.out.println("room "+ room);
@@ -127,22 +139,51 @@ public class ChatService {
 
     public List<Message> getHistory(String roomId) {
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(roomId);
-        Set<Message> messageSet=messageRepository.getAllByChatRoom(chatRoom);
-        List<Message> test=List.copyOf(messageSet);
-        return test;
+        List<Message> messageSet=messageRepository.getAllByChatRoom(chatRoom);
+        return messageSet;
     }
 
-    public List<ChatRoom> UserRoom(String userName) {
+    public Map<String,Boolean> UserRoom(String userName) {
         User user=userRepository.findByUsername(userName);
        // Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
-        Set<UserChatRoom>chatRooms=userChatRoomRepository.getAllByUser(user);
-        List<UserChatRoom> test=List.copyOf(chatRooms);
-        List <ChatRoom> answer=new ArrayList<>();
-        for (int i = 0; i <test.size() ; i++) {
-            answer.add(test.get(i).getChatRoom());
+        List<UserChatRoom> userChatRoomList=userChatRoomRepository.getAllByUser(user);;
+        Map<String,Boolean> chatMessageMap=new HashMap<String,Boolean>();
+        List<Message> messages=new ArrayList<>();
+        UserChatRoom userChatRoomprom;
+        Message ms;
+        LocalDateTime first;
+        LocalDateTime second;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+        for (int i = 0; i <userChatRoomList.size() ; i++) {
+            messages=messageRepository.getAllByChatRoom(userChatRoomList.get(i).getChatRoom());
+            userChatRoomprom=userChatRoomList.get(i);
+            if (messages.size()>0 && userChatRoomprom.getTime()!=null){
+                ms=messages.get(messages.size()-1);
+               // System.out.println("**************************************");
+               // System.out.println(ms.getDate());
+               // System.out.println(userChatRoomprom.getTime());
+                first=LocalDateTime.parse(ms.getDate(),formatter);
+                second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);;
+               // System.out.println(first);
+                //System.out.println(second);
+                //System.out.println(first.isAfter(second));//true если пользователь вышел раньше сообщения
+               // System.out.println("**************************************");
+                chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
+            }
+            else {
+                System.out.println();
+                chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
+            }
         }
-        System.out.println(answer);
-        return answer;
+
+        /*
+        List <ChatRoom> answer=new ArrayList<>();
+        for (int i = 0; i <userChatRoomList.size() ; i++) {
+            answer.add(userChatRoomList.get(i).getChatRoom());
+        }
+        System.out.println(answer);*/
+
+        return chatMessageMap;
     }
 
 

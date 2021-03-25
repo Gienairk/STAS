@@ -46,11 +46,12 @@ function cacheDOM(){
 }
 
 window.onbeforeunload = function() {
-    userOutFromChat()
+    if (roomId!=null)
+        userOutFromChat(roomId)
 
 }
-function userOutFromChat (){
-    stompClient.send(`/app/test`,{});
+function userOutFromChat (roomName){
+    stompClient.send(`/app/changeChat/${userName}`,{},roomName);
 }
 window.onload = function() {
     $.get(url + "/getCurrentUser",function (response){
@@ -119,18 +120,35 @@ function roomClientConnected() {
 }
 
 function onListofRoom(payload) {
+    let map = new Map()
     var listRoom = JSON.parse(payload.body);
-    let usersTemplateHTML="";
-    for (let i=0; i<listRoom.length;i++){//сделать переход в чат и контроль при создании , selectUser глянуть
-        usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+listRoom[i]+'\')" <li class="clearfix">\n' +
-            '                <div class="about">\n' +
-            '                     <div id="userNameAppender_' + listRoom[i] + '" class="name">' + listRoom[i] + '</div>\n' +
-            '                    <div class="status">\n' +
-            '                        <i class="fa fa-circle online"></i>\n' +
-            '                    </div>\n' +
-            '                </div>\n' +
-            '            </li></a>';
+    for (var value in listRoom) {
+        map.set(value,listRoom[value])
     }
+    let usersTemplateHTML="";
+    for (let [key, value] of map) {
+       if (value){
+           usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
+               '                <div class="about">\n' +
+               '                     <div id="userNameAppender_' + key + '" class="name newMessage">' + key + '</div>\n' +
+               '                    <div class="status">\n' +
+               '                        <i class="fa fa-circle online"></i>\n' +
+               '                    </div>\n' +
+               '                </div>\n' +
+               '            </li></a>';
+       }else{
+           usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
+               '                <div class="about">\n' +
+               '                     <div id="userNameAppender_' + key + '" class="name">' + key + '</div>\n' +
+               '                    <div class="status">\n' +
+               '                        <i class="fa fa-circle online"></i>\n' +
+               '                    </div>\n' +
+               '                </div>\n' +
+               '            </li></a>';
+       }
+    }
+
+
     $('#ChatList').html(usersTemplateHTML);
 }
 
@@ -171,6 +189,8 @@ function enterRoom(newRoomId){
     };
     stompClient.send(`/app/chat/rooms/${userName}`,{},JSON.stringify(data));
     chatCleaner()
+    if(roomId!=null)
+        userOutFromChat(roomId)
     roomId=newRoomId;
     chatWith.textContent=newRoomId;
     topic = `/app/chat/${newRoomId}`;
@@ -339,7 +359,7 @@ function leaveFromRoom(){
     chatWith.textContent="Chat with ...";
     currentSubscription.unsubscribe();
     roomId=null;
-    setTimeout(() => stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom), 50);
+    setTimeout(() => stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom), 100);
 
 }
 

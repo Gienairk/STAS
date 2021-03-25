@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserChatRoomRepository extends JpaRepository<UserChatRoom, Long> {
-    Set<UserChatRoom>getAllByUser(User user);
+    List<UserChatRoom>getAllByUser(User user);
     List<UserChatRoom> findAllByChatRoom(ChatRoom chatRoom);
     UserChatRoom getByChatRoomAndUser(ChatRoom chatRoom,User user);
 
