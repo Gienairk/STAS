@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> { 
     ChatRoom findByRoomName(String name);
-    Set<ChatRoom> getAllByUsersContains(User user);
+    //Set<ChatRoom> getAllByUsersContains(User user);
 
 
 

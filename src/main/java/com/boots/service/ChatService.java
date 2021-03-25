@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ChatService {
@@ -32,6 +29,8 @@ public class ChatService {
     GroupRepository groupRepository;
     @Autowired
     ChatAppController chatAppController;
+    @Autowired
+    UserChatRoomRepository userChatRoomRepository;
 
     public List<String> getUsers(){
 
@@ -68,7 +67,12 @@ public class ChatService {
     }
     public void messegeDelivery(String roomName){
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(roomName);
-        List<User> userList=userRepository.findAllByChatRooms(chatRoom);
+       // List<User> userList=userRepository.findAllByChatRooms(chatRoom);
+        List<UserChatRoom> userChatRoomList=userChatRoomRepository.findAllByChatRoom(chatRoom);
+        List<User> userList=new ArrayList<>();
+        for (int i = 0; i <userChatRoomList.size() ; i++) {
+            userList.add(userChatRoomList.get(i).getUser());
+        }
         for (int i = 0; i <userList.size() ; i++) {
            chatAppController.sendAwardaboutMessage(userList.get(i).getUsername(),roomName);
         }
@@ -78,19 +82,27 @@ public class ChatService {
     public void saveUser(String room,String user){
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
         User userObj=userRepository.findByUsername(user);
-        userObj.addChatRoom(chatRoom);
-        userRepository.save(userObj);
+        System.out.println("chatRoom "+chatRoom);
+        System.out.println("userObj "+userObj);
+        UserChatRoom userChatRoom=new UserChatRoom();
+        userChatRoom.setChatRoom(chatRoom);
+        userChatRoom.setUser(userObj);
+        System.out.println("userChatRoom "+userChatRoom);
+        if (userChatRoomRepository.getByChatRoomAndUser(chatRoom,userObj)==null)
+            userChatRoomRepository.save(userChatRoom);
+       // userObj.addChatRoom(chatRoom);
+        //userRepository.save(userObj);
 
     }
     public void leavefromRoom(String room,String user){
         User user1=userRepository.findByUsername(user);
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
-        System.out.println("++++++++++++++++");
+        /*System.out.println("++++++++++++++++");
         System.out.println(user1.getChatRooms());
         System.out.println("++++++++++++++++");
         user1.leaveFromRoom(chatRoom);
         System.out.println(user1.getChatRooms());
-        System.out.println("++++++++++++++++");
+        System.out.println("++++++++++++++++");*/
         userRepository.save(user1);
     }
     public void saveGroup(String group,String room){
@@ -122,9 +134,15 @@ public class ChatService {
 
     public List<ChatRoom> UserRoom(String userName) {
         User user=userRepository.findByUsername(userName);
-        Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
-        List<ChatRoom> test=List.copyOf(chatRooms);
-        return test;
+       // Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
+        Set<UserChatRoom>chatRooms=userChatRoomRepository.getAllByUser(user);
+        List<UserChatRoom> test=List.copyOf(chatRooms);
+        List <ChatRoom> answer=new ArrayList<>();
+        for (int i = 0; i <test.size() ; i++) {
+            answer.add(test.get(i).getChatRoom());
+        }
+        System.out.println(answer);
+        return answer;
     }
 
 

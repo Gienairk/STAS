@@ -6,9 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 
 
 @Entity
@@ -36,10 +35,11 @@ public class User implements UserDetails {
     private Set<Department> departments=new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Subject> subjects=new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<ChatRoom> chatRooms=new HashSet<>();;
+    /*@ManyToMany(fetch = FetchType.EAGER)
+    private Set<ChatRoom> chatRooms=new HashSet<>();;*/
 
-
+    @OneToMany(mappedBy = "user")
+    private Set<UserChatRoom> userChatRooms = new HashSet<UserChatRoom>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -50,7 +50,7 @@ public class User implements UserDetails {
     }
     public void addSubject(Subject subject){this.subjects.add(subject);}
     public void addGroup(Group group){this.groups.add(group);}
-    public void addChatRoom(ChatRoom chatRoom){this.chatRooms.add(chatRoom);}
+    //public void addChatRoom(ChatRoom chatRoom){this.chatRooms.add(chatRoom);}
     private Set<Role> getRoles() {
         return roles;
     }
@@ -58,7 +58,7 @@ public class User implements UserDetails {
     public void addRole(Role role){
         roles.add(role);
     }
-
+/*
     public Set<ChatRoom> getChatRooms() {
         return chatRooms;
     }
@@ -70,7 +70,7 @@ public class User implements UserDetails {
     public void leaveFromRoom(ChatRoom chatRoom){
         this.chatRooms.remove(chatRoom);
     }
-
+*/
     @Override
     public String getPassword() {
         return password;

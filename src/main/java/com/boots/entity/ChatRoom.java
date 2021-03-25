@@ -2,12 +2,9 @@ package com.boots.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-
 @Table(name = "t_chatRoom" )
 public class ChatRoom implements Serializable
 {
@@ -16,12 +13,17 @@ public class ChatRoom implements Serializable
     private Long id;
     @OneToMany(mappedBy = "chatRoom",fetch = FetchType.EAGER)
     private List<Message> messages=new ArrayList<>();
-    @ManyToMany(mappedBy = "chatRooms")
-    private List<User>users=new ArrayList<>();
+   /* @ManyToMany(mappedBy = "chatRooms")
+    private List<User>users=new ArrayList<>();*/
     String roomName;
+    @OneToMany(mappedBy = "chatRoom")
+    private Set<UserChatRoom> userChatRooms = new HashSet<UserChatRoom>();
 
     public ChatRoom() {
     }
+
+
+
 
 
     public Long getId() {
@@ -46,7 +48,7 @@ public class ChatRoom implements Serializable
     public List<Message> getMessages() {
         return messages;
     }
-
+/*
     public List<User> getUsers() {
         return users;
     }
@@ -56,7 +58,7 @@ public class ChatRoom implements Serializable
     }
     public void addUser(User user){
         users.add(user);
-    }
+    }*/
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;

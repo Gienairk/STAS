@@ -33,6 +33,13 @@ public class ChatAppController {
 
     List<ChatRoom> rooms;
 
+
+    @MessageMapping("/test")
+    public void test(){
+        System.out.println("============= я в тесте! ==================");
+
+    }
+
     @Autowired
     public void ChatController()
     {
@@ -122,12 +129,13 @@ public class ChatAppController {
     }
 
     @MessageMapping("chat/updateRoom/{userName}")
-    public void updateRoom(@DestinationVariable String userName,@Payload String chatRoomname){
+    public void updateRoom(@DestinationVariable String userName,@Payload String chatRoomName){
         System.out.println("===============");
         System.out.println("userName= "+userName);
-        System.out.println("chatRoomname= "+chatRoomname);
+        System.out.println("chatRoomname= "+chatRoomName);
+
         System.out.println("===============");
-        messagingTemplateTest.convertAndSend("/topic/chat/"+userName , chatRoomname);
+        messagingTemplateTest.convertAndSend("/topic/chat/"+userName , chatRoomName);
     }
 
     @MessageMapping("/chat/rooms/{groupName}/addGroup")

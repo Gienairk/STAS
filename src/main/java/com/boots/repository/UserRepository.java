@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByUserRightEquals(String userright);
     User findByFirstNameAndSecondNameAndLastNameAndUserRight(String firstname,String secondname,String lastname,String userright);
     List<User> findAllByGroups(Group group);
-    List<User> findAllByChatRooms(ChatRoom chatRoom);
+    //List<User> findAllByChatRooms(ChatRoom chatRoom);
 }

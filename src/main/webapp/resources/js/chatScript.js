@@ -45,6 +45,13 @@ function cacheDOM(){
     $chatHistoryList = $chatHistory.find('ul');
 }
 
+window.onbeforeunload = function() {
+    userOutFromChat()
+
+}
+function userOutFromChat (){
+    stompClient.send(`/app/test`,{});
+}
 window.onload = function() {
     $.get(url + "/getCurrentUser",function (response){
         userName=response;
@@ -88,7 +95,8 @@ function updateRoom(payload){
 }
 
 function updateRoomList(username,roomname){
-    stompClient.send(`/app/chat/updateRoom/${username}`,{},JSON.stringify(roomname));
+    console.log("updateRoomList "+roomname)
+    stompClient.send(`/app/chat/updateRoom/${username}`,{},roomname);
 }
 
 function messageClientConnected(){
@@ -147,6 +155,7 @@ function getAnswerRoom(payload){
     var message = JSON.parse(payload.body);
     console.log(message)
     if (message){
+        console.log("getAnswerRoom "+roomId)
         updateRoomList(userName,roomName.value.trim())
         enterRoom(roomName.value.trim())
     }
@@ -167,7 +176,8 @@ function enterRoom(newRoomId){
     topic = `/app/chat/${newRoomId}`;
 
     let elem=document.getElementById('userNameAppender_'+newRoomId)
-    elem.classList.remove('newMessage')
+    if (elem.classList.contains('newMessage'))
+        elem.classList.remove('newMessage')
     if (currentSubscription){
         currentSubscription.unsubscribe();
     }
@@ -243,7 +253,7 @@ function showMessage(message){
 }
 
 function chatCleaner(){
-var whatClean=document.getElementById("messageArea")
+    var whatClean=document.getElementById("messageArea")
     while (whatClean.firstChild) {
         whatClean.removeChild(whatClean.firstChild);
     }
@@ -305,6 +315,7 @@ function addUserToChatFunction(){
     var data={
         roomName:roomId,
     };
+    console.log("addUserToChatFunction "+roomId)
     updateRoomList(userToAddValue,roomId)
     stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
 
@@ -312,7 +323,7 @@ function addUserToChatFunction(){
 }
 
 $(document).ready(function (){
-   // refreshRoom.addEventListener('submit',listRoom,true)
+    // refreshRoom.addEventListener('submit',listRoom,true)
     createRoomForm.addEventListener('submit',createRoom,true)
     choseRoomName.addEventListener('submit',chooseChatName,true)
     messageForm.addEventListener('submit',sendMessage,true)
