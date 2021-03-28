@@ -116,6 +116,20 @@ public class ChatService {
         System.out.println(user1.getChatRooms());
         System.out.println("++++++++++++++++");*/
         userChatRoomRepository.delete(userChatRoom);
+        checkRoomIsEmptyAndDel(chatRoom);
+    }
+
+    public void checkRoomIsEmptyAndDel(ChatRoom chatRoom){
+        System.out.println("+++++++++++++++++++++++++++++++++++");
+        System.out.println(userChatRoomRepository.getAllByChatRoom(chatRoom));
+        ChatRoom chatr=new ChatRoom();
+        if (userChatRoomRepository.getAllByChatRoom(chatRoom).size()==0){
+            System.out.println("----------------------------");
+            List<Message> mes=messageRepository.getAllByChatRoom(chatRoom);
+            messageRepository.deleteAll(mes);
+            chatr=chatRoomRepository.findByRoomName(chatRoom.getRoomName());
+            chatRoomRepository.delete(chatr);
+        }
     }
     public void saveGroup(String group,String room){
         System.out.println("room "+ room);

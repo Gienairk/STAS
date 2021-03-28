@@ -32,15 +32,22 @@ var topic = null;
 
 let $chatHistory;
 let $chatHistoryList;
-
+let $textarea;
 
 function init() {
     cacheDOM();
-
+    $textarea.on('keyup', addMessageEnter.bind(this));
 }
 
+function addMessageEnter(event) {
+
+    if (event.keyCode === 13) {
+        sendMessage()
+    }
+}
 
 function cacheDOM(){
+    $textarea = $('#message-to-send');
     $chatHistory = $('.chat-history');
     $chatHistoryList = $chatHistory.find('ul');
 }
@@ -162,7 +169,7 @@ function createRoom(event){
     var roomNameValue=roomName.value.trim();
 
     if (roomNameValue){
-        stompClient.subscribe(`/app/chat/${roomNameValue}/CreateRoom`, getAnswerRoom);
+         stompClient.subscribe(`/app/chat/${roomNameValue}/CreateRoom`, getAnswerRoom);
     }
     createRoomForm.classList.add('hidden')
     event.preventDefault();
@@ -175,7 +182,7 @@ function getAnswerRoom(payload){
     if (message){
         console.log("getAnswerRoom "+roomId)
         updateRoomList(userName,roomName.value.trim())
-        enterRoom(roomName.value.trim())
+        setTimeout(() => enterRoom(roomName.value.trim()), 100);
     }
 
     else{
@@ -194,9 +201,8 @@ function enterRoom(newRoomId){
     roomId=newRoomId;
     chatWith.textContent=newRoomId;
     topic = `/app/chat/${newRoomId}`;
-
     let elem=document.getElementById('userNameAppender_'+newRoomId)
-    if (elem.classList.contains('newMessage'))
+    if (elem.classList!=null)
         elem.classList.remove('newMessage')
     if (currentSubscription){
         currentSubscription.unsubscribe();
@@ -206,6 +212,7 @@ function enterRoom(newRoomId){
 }
 
 function sendMessage(event){
+    console.log(event+ " event")
     var messageContent=messageToSend.value.trim();
     if (messageContent && stompClient){
         var chatMessage={
@@ -216,7 +223,8 @@ function sendMessage(event){
         stompClient.send(`${topic}/sendMessage`, {}, JSON.stringify(chatMessage));
     }
     messageToSend.value='';
-    event.preventDefault();
+    if (event!=null)
+        event.preventDefault();
 }
 
 function onPreviousMessage(payload) {
@@ -372,5 +380,9 @@ $(document).on('click', '.btn.btn-primary.join', function(event){
     event.preventDefault();
 });
 
+function handleEnter(e, func){
+    if (e.keyCode == 13 || e.which == 13)
+       console.log("enter")
+        }
 
 init();
