@@ -109,6 +109,13 @@ public class ChatAppController {
     {
        return chatService.getUsers();
     }
+
+    @SubscribeMapping("/chat/getTeatherList")
+    public  List<String>getAllTeathers()
+    {
+        return chatService.getTeathers();
+    }
+
     @SubscribeMapping("/chat/getGroupList")
     public  List<String>getGroupList()
     {

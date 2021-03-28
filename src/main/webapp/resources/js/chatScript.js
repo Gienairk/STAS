@@ -3,6 +3,7 @@ const url='http://localhost:8080';
 var createRoomForm=document.querySelector('#createRoomForm')
 
 var choseRoomName=document.querySelector('#chooseRoomName')
+var chooseRoomNameStudent=document.querySelector('#chooseRoomNameStudent')
 
 var chatWith=document.querySelector('#chatWith')
 
@@ -11,11 +12,12 @@ var messageForm=document.querySelector('#messageForm')
 
 var userToAdd=document.querySelector('#studentName')
 var groupToAdd=document.querySelector('#groupName')
-
+var teatherToAdd=document.querySelector('#teathersName')
+var roomToCreate=document.querySelector('#roomNameStudent')
 var roomName = document.querySelector('#roomName');
 var ChooseUserToAdd = document.querySelector('#addUserForm');
 var ChooseGroupToAdd = document.querySelector('#addGroupForm');
-
+var CreateRoomforStudent = document.querySelector('#createChatForStudentForm');
 var stompClient = null;
 var currentSubscription;
 
@@ -26,6 +28,7 @@ var roomSubscription;
 var messageClient=null;
 var messageSubscription;
 
+var userRight=null;
 var userName = null;
 var roomId = null;
 var topic = null;
@@ -62,6 +65,9 @@ function userOutFromChat (roomName){
 }
 window.onload = function() {
     $.get(url + "/getCurrentUser",function (response){
+        $.get(url + "/getCurrentUserRight",function (response){
+            userRight=response;
+        })
         userName=response;
         $('#userName').append(userName)
         var socket = new SockJS('/chat');
@@ -309,6 +315,15 @@ function getUserToAdd(payload){
     $('#student').html(usersTemplateHTML);
 }
 
+function getTeatherToAdd(payload){
+    var user = JSON.parse(payload.body);
+    let usersTemplateHTML="";
+    for (let i = 0; i <user.length ; i++) {
+        usersTemplateHTML=usersTemplateHTML+'<option >'+user[i]+'</option>'
+    }
+    $('#teathers').html(usersTemplateHTML);
+}
+
 function getGroupToAdd(payload){
     var group = JSON.parse(payload.body);
 
@@ -349,11 +364,64 @@ function addUserToChatFunction(){
 
     ChooseUserToAdd.classList.add('hidden');
 }
+function createRoomForStudent(){
+    var teather=teatherToAdd.value.trim();
+    var room=roomToCreate.value.trim();
+    if (teather!='' & room!=''){
+        stompClient.subscribe(`/app/chat/${room}/CreateRoom`, getAnswerRoomStudent);
+    }
+   /* var data={
+        roomName:roomId,
+    };
+    updateRoomList(userToAddValue,roomId)
+    stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
+
+    CreateRoomforStudent.classList.add('hidden');*/
+}
+function getAnswerRoomStudent(payload){
+    var message = JSON.parse(payload.body);
+    console.log(message)
+    if (message){
+        var teather=teatherToAdd.value.trim();
+        var room=roomToCreate.value.trim();
+        updateRoomList(userName,room)
+        updateRoomList(teather,room)
+
+        var data={
+            roomName:room,
+        };
+        stompClient.send(`/app/chat/rooms/${teather}`,{},JSON.stringify(data));
+        stompClient.send(`/app/chat/rooms/${userName}`,{},JSON.stringify(data));
+        setTimeout(() => enterRoom(room), 100);
+    }
+    else{
+        alert("This chat already exists ")
+    }
+    /*
+
+     var data={
+        roomName:roomId,
+    };
+    console.log("addUserToChatFunction "+roomId)
+    updateRoomList(userToAddValue,roomId)
+    stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
+     */
+}
+
+function createRoomStudent(){
+    CreateRoomforStudent.classList.remove('hidden')
+    stompClient.subscribe(`/app/chat/getTeatherList`, getTeatherToAdd);
+    event.preventDefault();
+}
 
 $(document).ready(function (){
     // refreshRoom.addEventListener('submit',listRoom,true)
-    createRoomForm.addEventListener('submit',createRoom,true)
-    choseRoomName.addEventListener('submit',chooseChatName,true)
+    if (chooseRoomNameStudent!=null){
+        chooseRoomNameStudent.addEventListener('submit',createRoomStudent,true)
+    }else{
+        createRoomForm.addEventListener('submit',createRoom,true)
+        choseRoomName.addEventListener('submit',chooseChatName,true)
+    }
     messageForm.addEventListener('submit',sendMessage,true)
 })
 

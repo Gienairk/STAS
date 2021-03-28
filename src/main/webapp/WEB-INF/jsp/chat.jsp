@@ -26,16 +26,31 @@
         <datalist id="group"></datalist>
         <button  id="addGroupToChat" onclick="addGroupToChatFunction()">Добавить</button>
     </div>
-<div class="container clearfix">
-    <div class="people-list" id="people-list">
-        <div class="search">
-            <form id="chooseRoomName" name="chooseRoomName">
-                <a id="userName"   type="text"></a>
-                <button onclick="">Create chat</button>
-            </form>
-                <button onclick="listRoom()">Refresh room</button>
 
+    <div id="createChatForStudentForm" class="hidden">
+        <input type="text" id="roomNameStudent" name="roomNameStudent" placeholder="Enter Chat Room name" autocomplete="off" class="form-control"/>
+        <input list="teathers" name="teathersName" id="teathersName">
+        <datalist id="teathers"></datalist>
+        <button  id="createChatStudent" onclick="createRoomForStudent()">Добавить</button>
+    </div>
+
+<div class="container clearfix">
+    <div class="people-list" id="people-list"  items="${userRight}" var="userRight">
+        <div class="search">
+            <c:if test="${ userRight == 'Admin'|| userRight == 'Teather'}">
+                <form id="chooseRoomName" name="chooseRoomName">
+                    <a id="userName"   type="text"></a>
+                    <button onclick="">Create chat</button>
+                </form>
+            </c:if>
+            <c:if test="${ userRight == 'Student'}">
+                <form id="chooseRoomNameStudent" name="chooseRoomNameStudent">
+                    <a id="userName"  type="text"></a>
+                    <button onclick="createRoomStudent()">Create chat</button>
+                </form>
+            </c:if>
         </div>
+
         <ul id="ChatList"class="list">
         </ul>
     </div>
@@ -73,8 +88,10 @@
                 <textarea id="message-to-send" name="message-to-send" placeholder="Type your message" rows="3"></textarea>
                 <button id="sendBtn" type="submit">Send</button>
             </form>
+        <c:if test="${ userRight == 'Admin'|| userRight == 'Teather'}">
             <button id="addUser" onclick="addUserFormOpen()" >add user</button>
             <button id="addGroup" onclick="addGroupFormOpen()">add group</button>
+        </c:if>
 
         </div> <!-- end chat-message -->
     </div> <!-- end chat -->

@@ -45,6 +45,16 @@ public class ChatService {
         return answer;
     }
 
+    public List<String> getTeathers(){
+
+        List<User> userList=userRepository.findAllByUserRightEquals("Teather");//Teather
+        List<String> answer=new ArrayList<>();
+        for (int i = 0; i <userList.size() ; i++) {
+            answer.add(userList.get(i).getUsername());
+        }
+        return answer;
+    }
+
     public List<String> getGroup() {
         List<Group> groupList=groupRepository.findAll();
         List<String> answer=new ArrayList<>();
@@ -185,8 +195,10 @@ public class ChatService {
                 chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
             }
             else {
-                System.out.println();
+                //System.out.println("**************************************");
+               // System.out.println(userChatRoomprom.getChatRoom());
                 chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
+                //System.out.println("**************************************");
             }
         }
 

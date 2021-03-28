@@ -41,6 +41,11 @@ public class MessengerController {
         return user.getUsername();
     }
 
+    @GetMapping("/getCurrentUserRight")
+    public String GetCurrentUserRight(@AuthenticationPrincipal User user){
+        System.out.println(user.getUserRight());
+        return user.getUserRight();
+    }
     @MessageMapping("/chat/{to}")
     public void sendMessage(@DestinationVariable String to, Message message) {
         System.out.println("handling send message: " + message + " to: " + to);
