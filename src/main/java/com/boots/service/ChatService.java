@@ -181,24 +181,14 @@ public class ChatService {
         for (int i = 0; i <userChatRoomList.size() ; i++) {
             messages=messageRepository.getAllByChatRoom(userChatRoomList.get(i).getChatRoom());
             userChatRoomprom=userChatRoomList.get(i);
-            if (messages.size()>0 && userChatRoomprom.getTime()!=null){
-                ms=messages.get(messages.size()-1);
-               // System.out.println("**************************************");
-               // System.out.println(ms.getDate());
-               // System.out.println(userChatRoomprom.getTime());
-                first=LocalDateTime.parse(ms.getDate(),formatter);
-                second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);;
-               // System.out.println(first);
-                //System.out.println(second);
-                //System.out.println(first.isAfter(second));//true если пользователь вышел раньше сообщения
-               // System.out.println("**************************************");
-                chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
+                if (messages.size()>0 && userChatRoomprom.getTime()!=null){
+                    ms=messages.get(messages.size()-1);
+                    first=LocalDateTime.parse(ms.getDate(),formatter);
+                    second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);;
+                    chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
             }
-            else {
-                //System.out.println("**************************************");
-               // System.out.println(userChatRoomprom.getChatRoom());
-                chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
-                //System.out.println("**************************************");
+                else {
+                    chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
             }
         }
 

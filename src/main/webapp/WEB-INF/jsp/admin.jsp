@@ -19,6 +19,7 @@
     <h4><a href="/admin/ChooseGroup">Выбор студентов и зачисление их в группы</a></h4>
     <h4><a href="/admin/ChooseSubject">Установка предметов(для преподавателей)</a></h4>
     <h4><a href="/admin/adminUserList">Пользователи</a></h4>
+    <h4><a href="/admin/adminUserListPage/1">Пользователи страницы</a></h4>
 </div>
 </body>
 </html>

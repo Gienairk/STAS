@@ -6,10 +6,12 @@ import com.boots.repository.SubjectRepository;
 import com.boots.service.DatafinderService;
 import com.boots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,11 +31,32 @@ public class AdminController {
     }
 
     @GetMapping("/admin/adminUserList")
-    public String userList(Model model) {
+    public String userList(Model model
+
+    ) {
         model.addAttribute("allUsers", userService.allUsers());
         return "adminUserList";
     }
 
+
+    @RequestMapping("/admin/adminUserListPage/{pageNo}")
+    public String userListPage(@PathVariable (value = "pageNo") int pageNo,Model model) {
+        int pageSize=2;
+        Page<User> page=userService.userList(pageNo,pageSize);
+        List<User> userList=page.getContent();
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("userList",userList);
+        return "adminUserListPage";
+    }
+    /*
+    @RequestMapping(value = "/admin/Groups/{id}",method = RequestMethod.GET)
+    public String getGroup(Model model, @PathVariable("id") Long id) {
+        Group group=datafinderService.findGroupbyId(id).orElseThrow(()-> new NullPointerException("в бд нет записи с данным id"));
+        model.addAttribute("Group", group);
+        return "Group";
+
+    }*/
 
     @PostMapping("/admin/adminPostfix")
     public String  Postfix(@RequestParam(required = false, defaultValue = "" ) Long postfixId,
