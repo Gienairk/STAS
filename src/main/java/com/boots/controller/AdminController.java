@@ -12,12 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Controller
 public class AdminController {
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -30,24 +34,45 @@ public class AdminController {
         return "admin";
     }
 
+    /*
     @GetMapping("/admin/adminUserList")
-    public String userList(Model model
-
-    ) {
+    public String userList(Model model) {
         model.addAttribute("allUsers", userService.allUsers());
         return "adminUserList";
-    }
+    }*/
 
 
     @RequestMapping("/admin/adminUserListPage/{pageNo}")
     public String userListPage(@PathVariable (value = "pageNo") int pageNo,Model model) {
-        int pageSize=2;
+        int pageSize=10;
         Page<User> page=userService.userList(pageNo,pageSize);
         List<User> userList=page.getContent();
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("userList",userList);
         return "adminUserListPage";
+    }
+
+
+    @PostMapping("/admin/adminUserListPage/{pageNo}")
+    public String deleteUserFromBase(@PathVariable (value = "pageNo") int pageNo,
+                                      @RequestParam(required = false, defaultValue = "" ) String name,
+                                      @RequestParam(required = false, defaultValue = "" ) String surname,
+                                      @RequestParam(required = false, defaultValue = "" ) String patronymic,
+                                      @RequestParam(required = false, defaultValue = "" ) Long userId,
+                                      @RequestParam(required = true, defaultValue = "" ) String action,
+                                      RedirectAttributes redirectAttrs,
+                                      Model model) {
+        if (action.equals("delete")){
+            datafinderService.deleteUser(userId);
+        }
+        if (action.equals("find")){
+            List<User>users=userService.findUserBySomeName(name,surname,patronymic);
+            redirectAttrs.addFlashAttribute("users",users);
+          //  redirectAttrs.addFlashAttribute("haveSomeUsers",1);
+        }
+        return "redirect:/admin/adminUserListPage/"+pageNo;
+        //return new RedirectView("/admin/adminUserListPage/"+pageNo);
     }
     /*
     @RequestMapping(value = "/admin/Groups/{id}",method = RequestMethod.GET)
@@ -241,7 +266,7 @@ public class AdminController {
         }
         return "redirect:/admin/Group";
     }
-
+/*
     @PostMapping("/admin/adminUserList")
     public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
                               @RequestParam(required = true, defaultValue = "" ) String action,
@@ -250,7 +275,7 @@ public class AdminController {
             userService.deleteUser(userId);
         }
         return "/admin/adminUserList";
-    }
+    }*/
 
     @GetMapping("/admin/Groups")
     public String allGroups(Model model) {
@@ -264,7 +289,20 @@ public class AdminController {
         Group group=datafinderService.findGroupbyId(id).orElseThrow(()-> new NullPointerException("в бд нет записи с данным id"));
         model.addAttribute("Group", group);
         return "Group";
-
+    }
+    @PostMapping("/admin/Groups/{id}")
+    public String  GroupDataChanger(
+                         @RequestParam(required = true,  defaultValue = "" ) String action,
+                         @RequestParam(required = true,  defaultValue = "" ) Long dataId,
+                         @PathVariable("id") Long id,
+                         Model model) {
+        if (action.equals("deleteSubject")){
+            datafinderService.deleteSubjectFromGroup(id,dataId);
+        }
+        if (action.equals("deleteUser")){
+            datafinderService.deleteUserFromGroup(id,dataId);
+        }
+        return "redirect:/admin/Groups/"+id;
     }
 /*
     @GetMapping("/admin/adminUserList/gt/{userId}")

@@ -32,7 +32,7 @@
           <form:input type="text" path="firstName" placeholder="firstName"></form:input>
       </div>
       <div>
-          <form:input type="text" path="secondName" placeholder="secondName"></form:input>
+          <form:input type="text" path="secondName" placeholder="Patronymic"></form:input>
       </div>
       <div>
           <form:input type="text" path="lastName" placeholder="lastName"></form:input>

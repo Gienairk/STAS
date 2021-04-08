@@ -12,13 +12,23 @@
 <div>
     <label>Студенты</label>
   <c:forEach items="${Group.users}" var="groupdata">
-    <p >${groupdata.toStringForPage()}</p>
+    <div >${groupdata.toStringForPage()}</div>
+    <form action="${pageContext.request.contextPath}/admin/Groups/${Group.id}"  method="post">
+      <input type="hidden" name="dataId" value="${groupdata.id}"/>
+      <input type="hidden" name="action" value="deleteUser"/>
+      <button type="submit">убрать из группы</button>
+    </form>
   </c:forEach>
     <label>Предметы</label>
   <c:forEach items="${Group.subjects}" var="groupdata">
-    <p >${groupdata.toStringForPage()}</p>
+    <div >${groupdata.toStringForPage()}</div>
+    <form action="${pageContext.request.contextPath}/admin/Groups/${Group.id}"  method="post">
+      <input type="hidden" name="dataId" value="${groupdata.id}"/>
+      <input type="hidden" name="action" value="deleteSubject"/>
+      <button type="submit">убрать</button>
+    </form>
   </c:forEach>
-  <a href="">Главная</a>
+  <a href="/">Главная</a>
 </div>
 </body>
 </html>

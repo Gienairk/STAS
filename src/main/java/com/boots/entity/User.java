@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String lastName;
     private String telegramName;
     private String userRight;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER )
     private Set<Role> roles=new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Group> groups=new HashSet<>();

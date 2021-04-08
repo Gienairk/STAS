@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,28 +11,63 @@
 
 <body>
 <div>
+    <div>
+        <form action="${pageContext.request.contextPath}/admin/adminUserListPage/${currentPage}"  method="post">
+            <input id="Name" name="name" type="text" placeholder="Имя"/>
+            <input id="Surname" name="surname" type="text" placeholder="Фамилия"/>
+            <input id="Patronymic" name="patronymic" type="text" placeholder="Отчество"/>
+            <input type="hidden" name="action" value="find"/>
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+
   <table>
      <thead>
      <th>ID</th>
-     <th>UserName</th>
+     <th>Логин</th>
+     <th>Имя</th>
+     <th>Отчество</th>
+     <th>Фамилия</th>
      </thead>
-     <c:forEach items="${userList}" var="user">
+      <c:if test="${fn:length(users)!=0}">
+      <c:forEach items="${users}" var="user">
+              <tr>
+                  <td>${user.id}</td>
+                  <td>${user.username}</td>
+                  <td>${user.firstName}</td>
+                  <td>${user.secondName}</td>
+                  <td>${user.lastName}</td>
+                  <td>
+                      <form action="${pageContext.request.contextPath}/admin/adminUserListPage/${currentPage}"  method="post">
+                          <input type="hidden" name="userId" value="${user.id}"/>
+                          <input type="hidden" name="action" value="delete"/>
+                          <button type="submit">Delete</button>
+                      </form>
+                  </td>
+              </tr>
+          </c:forEach>
+      </c:if>
+      <c:if test="${fn:length(users)==0}">
+      <c:forEach items="${userList}" var="user">
        <tr>
          <td>${user.id}</td>
          <td>${user.username}</td>
+         <td>${user.firstName}</td>
+         <td>${user.secondName}</td>
+         <td>${user.lastName}</td>
             <td>
-          <%-- <form action="${pageContext.request.contextPath}/admin" method="post">
+           <form action="${pageContext.request.contextPath}/admin/adminUserListPage/${currentPage}"  method="post">
                 <input type="hidden" name="userId" value="${user.id}"/>
                 <input type="hidden" name="action" value="delete"/>
                 <button type="submit">Delete</button>
               </form>
-
-         </td>--%>
-
+         </td>
       </tr>
     </c:forEach>
+      </c:if>
   </table>
 
+    <div>Всего ${totalPages} страниц</div>
     <c:if test="${currentPage-1>0}">
       <a href="/admin/adminUserListPage/${currentPage-1} ">Prev</a>
     </c:if>

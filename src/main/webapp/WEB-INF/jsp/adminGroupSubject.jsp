@@ -11,12 +11,10 @@
 
 <body>
 <div>
-  <a>сделать переход по старницам групп, то есть нажал, перешел на группы и там вся инфа о её предметах</a>
   <form action="${pageContext.request.contextPath}/admin/adminGroupSubject" method="post">
     <input type="hidden" name="action" value="create"/>
     <input list="group" name="group">
     <datalist id="group">
-
       <c:forEach items="${allGroup}" var="group">
         <option >${group.fullname}</option>
       </c:forEach>
@@ -24,7 +22,7 @@
     <input list="subject" name="subject">
     <datalist id="subject">
       <c:forEach items="${allSubject}" var="subject">
-        <option>${subject.name}</option>
+        <option>${subject.name}-</option>
       </c:forEach>
     </datalist>
     <button type="submit">Create</button>
@@ -37,11 +35,11 @@
 
     <c:forEach items="${allSG}" var="SG">
       <tr>
-        <td ><a href="Groups/${SG.id}" >${SG.number}</a></td>
+        <td ><a href="Groups/${SG.id}" >${SG.fullname}</a></td>
       </tr>
     </c:forEach>
   </table>
-  <a href="">Главная</a>
+  <a href="/">Главная</a>
 </div>
 </body>
 </html>

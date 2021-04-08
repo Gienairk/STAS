@@ -138,4 +138,32 @@ public class DatafinderService {
         String[] name=student.split(" ");
         return userRepository.findByFirstNameAndSecondNameAndLastNameAndUserRight(name[0],name[1],name[2],"Student");
     }
+
+    public void deleteUser(Long userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            //Optional<User> user=userRepository.findById(userId);
+            userRepository.deleteById(userId);
+        }
+    }
+
+    public void deleteSubjectFromGroup(Long groupId,Long subjectId) {
+        Optional<Group> groupOptional=groupRepository.findById(groupId);
+        Group group=groupOptional.get();
+        Optional<Subject> subjectOptional=subjectRepository.findById(subjectId);
+        Subject subject=subjectOptional.get();
+        group.getSubjects().remove(subject);
+        groupRepository.save(group);
+        //Optional<Subject> subject=subjectRepository.findById(subjectId);
+        //group.get().getSubjects().remove(subject);
+        //groupRepository.save(group.get());
+    }
+
+    public void deleteUserFromGroup(Long groupId, Long userId) {
+        Optional<Group> groupOptional=groupRepository.findById(groupId);
+        Group group=groupOptional.get();
+        Optional<User> userOptional=userRepository.findById(userId);
+        User user=userOptional.get();
+        user.getGroups().remove(group);
+        userRepository.save(user);
+    }
 }
