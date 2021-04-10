@@ -2,6 +2,7 @@ package com.boots.repository;
 
 import com.boots.entity.Group;
 
+import com.boots.entity.Subject;
 import com.boots.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +14,7 @@ public interface GroupRepository extends JpaRepository<Group,Long> {
     Set<Group> findAllBySubjectsNotNull();
     Group findByFullname(String fullname);
     Optional<Group> findById(Long id);
-
-
+    List<Group>findAllByUsers(User user);
+    List<Group> findAllBySubjects(Subject subject);
 
 }

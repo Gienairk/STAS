@@ -5,6 +5,9 @@ import com.boots.entity.*;
 import com.boots.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class DatafinderService {
     GroupRepository groupRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserChatRoomRepository userChatRoomRepository;
 
 
 
@@ -95,6 +100,36 @@ public class DatafinderService {
         }
         return false;
     }
+    public boolean deleteSubjectFromBase(Long subjectName) {
+        if (subjectRepository.findById(subjectName)!=null) {
+            Optional<Subject> subjectOptional=subjectRepository.findById(subjectName);
+            Subject subject=subjectOptional.get();
+            deleteSubjectFromGroup(subject);
+            deleteSubjectFromTeathers(subject);
+            subjectRepository.delete(subject);
+            /*System.out.println("+++++" +subject.getGroups());
+            subject.getGroups().clear();
+            System.out.println("-----" +subject.getGroups());
+            subject.getUsers().clear();
+            subjectRepository.save(subject);*/
+            return true;
+        }
+        return false;
+    }
+    public void deleteSubjectFromGroup(Subject subject){
+        List<Group>groups=groupRepository.findAllBySubjects(subject);
+        for (int i = 0; i <groups.size() ; i++) {
+            groups.get(i).getSubjects().remove(subject);
+            groupRepository.save(groups.get(i));
+        }
+    }
+    public void deleteSubjectFromTeathers(Subject subject){
+        List<User>userList=userRepository.findAllBySubjects(subject);
+        for (int i = 0; i <userList.size() ; i++) {
+            userList.get(i).getSubjects().remove(subject);
+            userRepository.save(userList.get(i));
+        }
+    }
 
     public boolean deleteDepartment(Long departmentId) {
         if (departmentRepository.findById(departmentId).isPresent()) {
@@ -165,5 +200,41 @@ public class DatafinderService {
         User user=userOptional.get();
         user.getGroups().remove(group);
         userRepository.save(user);
+    }
+
+    public void deleteUserFromGroups(Long userId) {
+        Optional<User> userOptional=userRepository.findById(userId);
+        User user=userOptional.get();
+        user.getGroups().clear();
+        userRepository.save(user);
+
+
+    }
+    public void deleteUserFromChats(Long userId) {
+        Optional<User> userOptional=userRepository.findById(userId);
+        User user=userOptional.get();
+        List<UserChatRoom> chatRooms=userChatRoomRepository.getAllByUser(user);
+        for (int i = 0; i <chatRooms.size() ; i++) {
+            userChatRoomRepository.delete(chatRooms.get(i));
+        }
+        //user.getUserChatRooms().clear();
+        //userRepository.save(user);
+
+    }
+    public void deleteTeather(Long userId) {
+        Optional<User> userOptional=userRepository.findById(userId);
+        User user=userOptional.get();
+        user.getSubjects().clear();
+        user.getDepartments().clear();
+        userRepository.save(user);
+    }
+    public Page<User> userList(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo -1,pageSize);
+        return this.userRepository.findAll(pageable);
+    }
+
+    public Page<Subject> subjectList(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo -1,pageSize);
+        return this.subjectRepository.findAll(pageable);
     }
 }

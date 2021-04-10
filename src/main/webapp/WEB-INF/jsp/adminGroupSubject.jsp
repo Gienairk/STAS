@@ -22,7 +22,7 @@
     <input list="subject" name="subject">
     <datalist id="subject">
       <c:forEach items="${allSubject}" var="subject">
-        <option>${subject.name}-</option>
+        <option>${subject.name}</option>
       </c:forEach>
     </datalist>
     <button type="submit">Create</button>

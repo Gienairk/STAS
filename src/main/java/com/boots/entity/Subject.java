@@ -16,6 +16,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String name;
     @ManyToMany(mappedBy = "subjects")
     private Set<Group> groups=new HashSet<>();

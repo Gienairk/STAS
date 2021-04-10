@@ -3,6 +3,7 @@ package com.boots.repository;
 
 import com.boots.entity.ChatRoom;
 import com.boots.entity.Group;
+import com.boots.entity.Subject;
 import com.boots.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByFirstNameAndSecondNameAndLastName(String string,String string1,String string2);
 
-   // Page<User> findAll(Pageable pageable);
+
+    List<User> findAllBySubjects(Subject subject);
+
+    // Page<User> findAll(Pageable pageable);
     //List<User> findAllByChatRooms(ChatRoom chatRoom);
 }

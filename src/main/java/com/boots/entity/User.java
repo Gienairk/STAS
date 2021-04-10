@@ -200,6 +200,14 @@ public class User implements UserDetails {
         return lastName+" "+firstName+" "+secondName;
     }
 
+    public Set<UserChatRoom> getUserChatRooms() {
+        return userChatRooms;
+    }
+
+    public void setUserChatRooms(Set<UserChatRoom> userChatRooms) {
+        this.userChatRooms = userChatRooms;
+    }
+
     @Override
     public String toString() {
         return "User{" +

@@ -21,13 +21,13 @@ import java.util.List;
 
 @Controller
 public class AdminController {
-
     @Autowired
     private UserService userService;
+
     @Autowired
     private DatafinderService datafinderService;
 
-
+    final int pageSize=10;
 
     @GetMapping("/admin")
     public String admin(Model model){
@@ -42,10 +42,48 @@ public class AdminController {
     }*/
 
 
+    @RequestMapping("/admin/SubjectPage/{pageNo}")
+    public String subjectPage(@PathVariable (value = "pageNo") int pageNo,Model model) {
+        Page<Subject>page=datafinderService.subjectList(pageNo,pageSize);
+        List<Subject>subjectList=page.getContent();
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("subjectList",subjectList);
+        /*Page<User> page=userService.userList(pageNo,pageSize);
+        List<User> userList=page.getContent();
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("userList",userList);*/
+        return "subjectPage";
+    }
+
+    @PostMapping("/admin/SubjectPage/{pageNo}")
+    public String actionSubjectInBase(@PathVariable (value = "pageNo") int pageNo,
+                                     @RequestParam(required = false, defaultValue = "" ) String name,
+                                     @RequestParam(required = false, defaultValue = "" ) Long subjectId,
+                                     @RequestParam(required = true, defaultValue = "" ) String action,
+                                     RedirectAttributes redirectAttrs,
+                                     Model model) {
+        if (action.equals("delete")){
+            datafinderService.deleteSubjectFromBase(subjectId);
+        }
+        if (action.equals("find")){
+            if (name.equals(""))
+                return "redirect:/admin/SubjectPage/"+pageNo;
+            List<Subject>subjects=new ArrayList<>();
+            subjects.add(datafinderService.findSubjectbyname(name));
+            if (subjects.get(0)==null)
+                return "redirect:/admin/SubjectPage/"+pageNo;
+            redirectAttrs.addFlashAttribute("subject",subjects);
+        }
+        return "redirect:/admin/SubjectPage/"+pageNo;
+
+    }
+
+
     @RequestMapping("/admin/adminUserListPage/{pageNo}")
     public String userListPage(@PathVariable (value = "pageNo") int pageNo,Model model) {
-        int pageSize=10;
-        Page<User> page=userService.userList(pageNo,pageSize);
+        Page<User> page=datafinderService.userList(pageNo,pageSize);
         List<User> userList=page.getContent();
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("totalPages",page.getTotalPages());
@@ -55,7 +93,7 @@ public class AdminController {
 
 
     @PostMapping("/admin/adminUserListPage/{pageNo}")
-    public String deleteUserFromBase(@PathVariable (value = "pageNo") int pageNo,
+    public String actionUserInBase(@PathVariable (value = "pageNo") int pageNo,
                                       @RequestParam(required = false, defaultValue = "" ) String name,
                                       @RequestParam(required = false, defaultValue = "" ) String surname,
                                       @RequestParam(required = false, defaultValue = "" ) String patronymic,
@@ -64,6 +102,9 @@ public class AdminController {
                                       RedirectAttributes redirectAttrs,
                                       Model model) {
         if (action.equals("delete")){
+            datafinderService.deleteTeather(userId);
+            datafinderService.deleteUserFromGroups(userId);
+            datafinderService.deleteUserFromChats(userId);
             datafinderService.deleteUser(userId);
         }
         if (action.equals("find")){

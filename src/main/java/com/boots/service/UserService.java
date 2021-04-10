@@ -44,10 +44,10 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Page<User> userList(int pageNo,int pageSize) {
+    /*public Page<User> userList(int pageNo,int pageSize) {
         Pageable pageable= PageRequest.of(pageNo -1,pageSize);
         return this.userRepository.findAll(pageable);
-    }
+    }*/
 
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
@@ -96,7 +96,7 @@ public class UserService implements UserDetailsService {
             userList=userRepository.findAllByFirstName(firstName);
         }
         if (!firstNameNull && lastNameNull && !secondNameNull){
-            userList=userRepository.findAllByLastNameAndFirstName(secondName,firstName);
+            userList=userRepository.findAllByFirstNameAndSecondName(firstName,secondName);
         }
         if (!firstNameNull && !lastNameNull && secondNameNull){
             userList=userRepository.findAllByLastNameAndFirstName(lastName,firstName);

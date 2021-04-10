@@ -17,13 +17,13 @@
     <th>UserName</th>
 
     </thead>
-    <c:forEach items="${allUsers}" var="user">
+    <c:forEach items="${allUsers}" var="subject">
       <tr>
-        <td>${user.id}</td>
-        <td>${user.username}</td>
+        <td>${subject.id}</td>
+        <td>${subject.username}</td>
         <td>
           <form action="${pageContext.request.contextPath}/admin" method="post">
-            <input type="hidden" name="userId" value="${user.id}"/>
+            <input type="hidden" name="userId" value="${subject.id}"/>
             <input type="hidden" name="action" value="delete"/>
             <button type="submit">Delete</button>
           </form>

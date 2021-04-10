@@ -30,16 +30,16 @@
      <th>Фамилия</th>
      </thead>
       <c:if test="${fn:length(users)!=0}">
-      <c:forEach items="${users}" var="user">
+      <c:forEach items="${users}" var="subject">
               <tr>
-                  <td>${user.id}</td>
-                  <td>${user.username}</td>
-                  <td>${user.firstName}</td>
-                  <td>${user.secondName}</td>
-                  <td>${user.lastName}</td>
+                  <td>${subject.id}</td>
+                  <td>${subject.username}</td>
+                  <td>${subject.firstName}</td>
+                  <td>${subject.secondName}</td>
+                  <td>${subject.lastName}</td>
                   <td>
                       <form action="${pageContext.request.contextPath}/admin/adminUserListPage/${currentPage}"  method="post">
-                          <input type="hidden" name="userId" value="${user.id}"/>
+                          <input type="hidden" name="userId" value="${subject.id}"/>
                           <input type="hidden" name="action" value="delete"/>
                           <button type="submit">Delete</button>
                       </form>
@@ -48,16 +48,16 @@
           </c:forEach>
       </c:if>
       <c:if test="${fn:length(users)==0}">
-      <c:forEach items="${userList}" var="user">
+      <c:forEach items="${userList}" var="subject">
        <tr>
-         <td>${user.id}</td>
-         <td>${user.username}</td>
-         <td>${user.firstName}</td>
-         <td>${user.secondName}</td>
-         <td>${user.lastName}</td>
+         <td>${subject.id}</td>
+         <td>${subject.username}</td>
+         <td>${subject.firstName}</td>
+         <td>${subject.secondName}</td>
+         <td>${subject.lastName}</td>
             <td>
            <form action="${pageContext.request.contextPath}/admin/adminUserListPage/${currentPage}"  method="post">
-                <input type="hidden" name="userId" value="${user.id}"/>
+                <input type="hidden" name="userId" value="${subject.id}"/>
                 <input type="hidden" name="action" value="delete"/>
                 <button type="submit">Delete</button>
               </form>
