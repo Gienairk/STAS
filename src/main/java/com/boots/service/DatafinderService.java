@@ -237,4 +237,9 @@ public class DatafinderService {
         Pageable pageable= PageRequest.of(pageNo -1,pageSize);
         return this.subjectRepository.findAll(pageable);
     }
+
+    public Page<Group> groupsList(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo -1,pageSize);
+        return this.groupRepository.findAll(pageable);
+    }
 }

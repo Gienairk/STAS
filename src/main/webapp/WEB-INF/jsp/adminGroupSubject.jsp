@@ -35,7 +35,7 @@
 
     <c:forEach items="${allSG}" var="SG">
       <tr>
-        <td ><a href="Groups/${SG.id}" >${SG.fullname}</a></td>
+        <td ><a href="/admin/Groups/Group/${SG.id}" >${SG.fullname}</a></td>
       </tr>
     </c:forEach>
   </table>

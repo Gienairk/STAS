@@ -27,7 +27,7 @@ public class AdminController {
     @Autowired
     private DatafinderService datafinderService;
 
-    final int pageSize=10;
+    final int pageSize=2;
 
     @GetMapping("/admin")
     public String admin(Model model){
@@ -191,7 +191,7 @@ public class AdminController {
         return "adminDepartment";
     }
 
-    @GetMapping("/admin/Group")
+    @GetMapping("/admin/GroupCreate")
     public String Group(Model model) {
         model.addAttribute("allGroup", datafinderService.allGroup());
         model.addAttribute("allPostfix",datafinderService.allPostfix());
@@ -273,8 +273,6 @@ public class AdminController {
                                 @RequestParam(required = false, defaultValue = "" ) String subject,
                                 @RequestParam(required = false, defaultValue = "" ) String group,
                                 Model model) {
-        System.out.println(subject);
-        System.out.println(group);
         if (action.equals("create")){
             Subject subjectob=datafinderService.findSubjectbyname(subject);
             Group groupob=datafinderService.findGroupbyFullName(group);
@@ -305,7 +303,7 @@ public class AdminController {
         if (action.equals("delete")){
             datafinderService.deleteGroup(groupId);
         }
-        return "redirect:/admin/Group";
+        return "redirect:/admin/GroupCreate";
     }
 /*
     @PostMapping("/admin/adminUserList")
@@ -317,21 +315,31 @@ public class AdminController {
         }
         return "/admin/adminUserList";
     }*/
-
+/*
     @GetMapping("/admin/Groups")
     public String allGroups(Model model) {
         model.addAttribute("allGroup", datafinderService.allGroup());
-
         return "Groups";
     }
-
-    @RequestMapping(value = "/admin/Groups/{id}",method = RequestMethod.GET)
+*/
+    @RequestMapping("/admin/Groups/{pageNo}")
+    public String allGroups(@PathVariable (value="pageNo") int pageNo,Model model) {
+        System.out.println("test-----------------------");
+       // model.addAttribute("allGroup", datafinderService.allGroup());
+        Page<Group> page=datafinderService.groupsList(pageNo,pageSize);
+        List<Group> groupList=page.getContent();
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("groupList",groupList);
+        return "Groups";
+}
+    @RequestMapping(value = "/admin/Groups/Group/{id}",method = RequestMethod.GET)
     public String getGroup(Model model, @PathVariable("id") Long id) {
         Group group=datafinderService.findGroupbyId(id).orElseThrow(()-> new NullPointerException("в бд нет записи с данным id"));
         model.addAttribute("Group", group);
         return "Group";
     }
-    @PostMapping("/admin/Groups/{id}")
+    @PostMapping("/admin/Groups/Group/{id}")
     public String  GroupDataChanger(
                          @RequestParam(required = true,  defaultValue = "" ) String action,
                          @RequestParam(required = true,  defaultValue = "" ) Long dataId,
@@ -343,7 +351,7 @@ public class AdminController {
         if (action.equals("deleteUser")){
             datafinderService.deleteUserFromGroup(id,dataId);
         }
-        return "redirect:/admin/Groups/"+id;
+        return "redirect:/admin/Groups/Group/"+id;
     }
 /*
     @GetMapping("/admin/adminUserList/gt/{userId}")

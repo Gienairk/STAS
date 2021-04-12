@@ -12,8 +12,8 @@
     <h4><a href="/admin/Subject">Создать предметы</a></h4>
     <h4><a href="/admin/SubjectPage/1">Предметы</a></h4>
     <h4><a href="/admin/Department">Отделений</a></h4>
-    <h4><a href="/admin/Group">Группы</a></h4>
-    <h4><a href="/admin/Groups">Список групп</a></h4>
+    <h4><a href="/admin/GroupCreate">Группы</a></h4>
+    <h4><a href="/admin/Groups/1">Список групп</a></h4>
     <h4><a href="/admin/GroupSubject">Предметы для групп</a></h4>
     <h4><a href="/admin/ChooseDepartment">Установка отделения(для преподавателей)</a></h4>
     <h4><a href="/admin/ChooseGroup">Выбор студентов и зачисление их в группы</a></h4>
