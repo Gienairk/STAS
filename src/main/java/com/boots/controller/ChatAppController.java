@@ -41,7 +41,7 @@ public class ChatAppController {
     @MessageMapping("/changeChat/{userName}")
     public void test(@DestinationVariable String userName, @Payload String chatName){
         Date date=new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
         String newFomart = formatter.format(date);
         //System.out.println(userName+" "+ chatName+" "+newFomart);
         chatService.saveTimeData(newFomart,userName,chatName);

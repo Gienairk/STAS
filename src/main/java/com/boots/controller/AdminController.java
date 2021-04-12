@@ -108,7 +108,7 @@ public class AdminController {
             datafinderService.deleteUser(userId);
         }
         if (action.equals("find")){
-            List<User>users=userService.findUserBySomeName(name,surname,patronymic);
+            List<User>users=datafinderService.findUserBySomeName(name,surname,patronymic);
             redirectAttrs.addFlashAttribute("users",users);
           //  redirectAttrs.addFlashAttribute("haveSomeUsers",1);
         }
@@ -322,9 +322,19 @@ public class AdminController {
         return "Groups";
     }
 */
+
+    @RequestMapping("/admin/PostfixPage/{pageNo}")
+    public String allPostfix(@PathVariable (value="pageNo") int pageNo,Model model) {
+        Page<Postfix> page=datafinderService.postfixList(pageNo,pageSize);
+        List<Postfix> postfixList=page.getContent();
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("postfixList",postfixList);
+        return "postfix";
+    }
+
     @RequestMapping("/admin/Groups/{pageNo}")
     public String allGroups(@PathVariable (value="pageNo") int pageNo,Model model) {
-        System.out.println("test-----------------------");
        // model.addAttribute("allGroup", datafinderService.allGroup());
         Page<Group> page=datafinderService.groupsList(pageNo,pageSize);
         List<Group> groupList=page.getContent();
@@ -333,6 +343,18 @@ public class AdminController {
         model.addAttribute("groupList",groupList);
         return "Groups";
 }
+
+    @PostMapping("/admin/Groups/{pageNo}")
+    public String findGroup(@PathVariable (value = "pageNo") int pageNo,
+                                   @RequestParam(required = false, defaultValue = "" ) String groupNumber,
+                                   @RequestParam(required = false, defaultValue = "" ) String groupPostfix,
+                                   RedirectAttributes redirectAttrs,
+                                   Model model) {
+        List<Group>groupRez=datafinderService.findGroupByName(groupNumber,groupPostfix);
+        redirectAttrs.addFlashAttribute("groupRez",groupRez);
+        return "redirect:/admin/Groups/"+pageNo;
+        //return new RedirectView("/admin/adminUserListPage/"+pageNo);
+    }
     @RequestMapping(value = "/admin/Groups/Group/{id}",method = RequestMethod.GET)
     public String getGroup(Model model, @PathVariable("id") Long id) {
         Group group=datafinderService.findGroupbyId(id).orElseThrow(()-> new NullPointerException("в бд нет записи с данным id"));

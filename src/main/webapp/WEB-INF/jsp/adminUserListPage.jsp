@@ -64,15 +64,14 @@
          </td>
       </tr>
     </c:forEach>
-      </c:if>
   </table>
-
     <div>Всего ${totalPages} страниц</div>
     <c:if test="${currentPage-1>0}">
       <a href="/admin/adminUserListPage/${currentPage-1} ">Prev</a>
     </c:if>
     <c:if test="${currentPage+1<=totalPages}">
         <a href="/admin/adminUserListPage/${currentPage+1}">Next</a>
+    </c:if>
     </c:if>
   <a href="/">Главная</a>
 </div>

@@ -1,5 +1,6 @@
 package com.boots.service;
 
+import com.boots.entity.Group;
 import com.boots.entity.Role;
 import com.boots.entity.User;
 import com.boots.repository.RoleRepository;
@@ -75,37 +76,8 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public List<User> findUserBySomeName(String firstName,String lastName,String secondName){
-        List<User> userList=null;
-        boolean firstNameNull= (firstName.equals(""));//firstName
-        boolean lastNameNull= (lastName.equals(""));//lastName
-        boolean secondNameNull= (secondName.equals(""));//secondName
-        if (firstNameNull && lastNameNull && secondNameNull){
-            userList=userRepository.findAll();
-        }
-        if (firstNameNull && lastNameNull && !secondNameNull){
-            userList=userRepository.findAllBySecondName(secondName);
-        }
-        if (firstNameNull && !lastNameNull && secondNameNull){
-            userList=userRepository.findAllByLastName(lastName);
-        }
-        if (firstNameNull && !lastNameNull && !secondNameNull){
-            userList=userRepository.findAllByLastNameAndSecondName(lastName,secondName);
-        }
-        if (!firstNameNull && lastNameNull && secondNameNull){
-            userList=userRepository.findAllByFirstName(firstName);
-        }
-        if (!firstNameNull && lastNameNull && !secondNameNull){
-            userList=userRepository.findAllByFirstNameAndSecondName(firstName,secondName);
-        }
-        if (!firstNameNull && !lastNameNull && secondNameNull){
-            userList=userRepository.findAllByLastNameAndFirstName(lastName,firstName);
-        }
-        if (!firstNameNull && !lastNameNull && !secondNameNull){
-            userList=userRepository.findAllByFirstNameAndSecondNameAndLastName(firstName,secondName,lastName);
-        }
-        return userList;
-    }
+
+
 
 /*
     public boolean deleteUser(Long userId) {

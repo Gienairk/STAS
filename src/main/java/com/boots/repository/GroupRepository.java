@@ -16,5 +16,6 @@ public interface GroupRepository extends JpaRepository<Group,Long> {
     Optional<Group> findById(Long id);
     List<Group>findAllByUsers(User user);
     List<Group> findAllBySubjects(Subject subject);
-
+    List<Group>findAllByFullname(String string);
+    List<Group>getAllByFullnameContains(String string);
 }

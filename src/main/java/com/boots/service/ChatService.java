@@ -70,7 +70,7 @@ public class ChatService {
 
     public void saveMessage(String roomName, Message message){
         Date date=new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
         String newFomart = formatter.format(date);
         Message localMessage=new Message(message);
         localMessage.setDate(newFomart);
@@ -177,7 +177,7 @@ public class ChatService {
         Message ms;
         LocalDateTime first;
         LocalDateTime second;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy");
         for (int i = 0; i <userChatRoomList.size() ; i++) {
             messages=messageRepository.getAllByChatRoom(userChatRoomList.get(i).getChatRoom());
             userChatRoomprom=userChatRoomList.get(i);

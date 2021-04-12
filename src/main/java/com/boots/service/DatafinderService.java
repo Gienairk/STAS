@@ -242,4 +242,49 @@ public class DatafinderService {
         Pageable pageable= PageRequest.of(pageNo -1,pageSize);
         return this.groupRepository.findAll(pageable);
     }
+
+    public Page<Postfix> postfixList(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo -1,pageSize);
+        return this.postfixRepository.findAll(pageable);
+    }
+
+    public List<User> findUserBySomeName(String firstName,String lastName,String secondName){
+        List<User> userList=null;
+        boolean firstNameNull= (firstName.equals(""));//firstName
+        boolean lastNameNull= (lastName.equals(""));//lastName
+        boolean secondNameNull= (secondName.equals(""));//secondName
+        if (firstNameNull && lastNameNull && secondNameNull){
+            userList=userRepository.findAll();
+        }
+        if (firstNameNull && lastNameNull && !secondNameNull){
+            userList=userRepository.findAllBySecondName(secondName);
+        }
+        if (firstNameNull && !lastNameNull && secondNameNull){
+            userList=userRepository.findAllByLastName(lastName);
+        }
+        if (firstNameNull && !lastNameNull && !secondNameNull){
+            userList=userRepository.findAllByLastNameAndSecondName(lastName,secondName);
+        }
+        if (!firstNameNull && lastNameNull && secondNameNull){
+            userList=userRepository.findAllByFirstName(firstName);
+        }
+        if (!firstNameNull && lastNameNull && !secondNameNull){
+            userList=userRepository.findAllByFirstNameAndSecondName(firstName,secondName);
+        }
+        if (!firstNameNull && !lastNameNull && secondNameNull){
+            userList=userRepository.findAllByLastNameAndFirstName(lastName,firstName);
+        }
+        if (!firstNameNull && !lastNameNull && !secondNameNull){
+            userList=userRepository.findAllByFirstNameAndSecondNameAndLastName(firstName,secondName,lastName);
+        }
+        return userList;
+    }
+    public List<Group> findGroupByName(String groupNumber, String groupPostfix) {
+        String fullnameFinder=groupNumber+"-"+groupPostfix;
+        return groupRepository.getAllByFullnameContains(fullnameFinder);
+
+
+    }
+
+
 }

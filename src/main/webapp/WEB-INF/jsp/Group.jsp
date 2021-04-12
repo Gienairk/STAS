@@ -11,24 +11,35 @@
 <body>
 <div>
     <label>Студенты</label>
+  <table>
   <c:forEach items="${Group.users}" var="groupdata">
-    <div >${groupdata.toStringForPage()}</div>
+    <tr>
+    <td >${groupdata.toStringForPage()}</td>
+      <td>
     <form action="${pageContext.request.contextPath}/admin/Groups/Group/${Group.id}"  method="post">
       <input type="hidden" name="dataId" value="${groupdata.id}"/>
       <input type="hidden" name="action" value="deleteUser"/>
       <button type="submit">убрать из группы</button>
     </form>
+      </td>
+    </tr>
   </c:forEach>
+  </table>
     <label>Предметы</label>
+  <table>
   <c:forEach items="${Group.subjects}" var="groupdata">
-    <div >${groupdata.toStringForPage()}</div>
-    <form action="${pageContext.request.contextPath}/admin/Groups/Group/${Group.id}"  method="post">
+    <tr>
+    <td >${groupdata.toStringForPage()}</td>
+      <td>
+        <form action="${pageContext.request.contextPath}/admin/Groups/Group/${Group.id}"  method="post">
       <input type="hidden" name="dataId" value="${groupdata.id}"/>
       <input type="hidden" name="action" value="deleteSubject"/>
       <button type="submit">убрать</button>
     </form>
+      </td >
+    </tr>
   </c:forEach>
-  <a href="/">Главная</a>
+  <div><a href="/">Главная</a></div>
 </div>
 </body>
 </html>

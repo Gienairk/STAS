@@ -8,7 +8,8 @@
 <body>
 <div>
     <h3>${pageContext.request.userPrincipal.name}</h3>
-    <h4><a href="/admin/Postfix">Постфиксы</a></h4>
+    <h4><a href="/admin/Postfix">Cоздать постфиксы</a></h4>
+    <h4><a href="/admin/PostfixPage/1">Постфиксы</a></h4>
     <h4><a href="/admin/Subject">Создать предметы</a></h4>
     <h4><a href="/admin/SubjectPage/1">Предметы</a></h4>
     <h4><a href="/admin/Department">Отделений</a></h4>
