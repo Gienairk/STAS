@@ -27,7 +27,7 @@ public class AdminController {
     @Autowired
     private DatafinderService datafinderService;
 
-    final int pageSize=2;
+    final int pageSize=10;
 
     @GetMapping("/admin")
     public String admin(Model model){
@@ -361,10 +361,16 @@ public class AdminController {
     public String findGroup(@PathVariable (value = "pageNo") int pageNo,
                                    @RequestParam(required = false, defaultValue = "" ) String groupNumber,
                                    @RequestParam(required = false, defaultValue = "" ) String groupPostfix,
+                                   @RequestParam(required = true,  defaultValue = "" ) String action,
                                    RedirectAttributes redirectAttrs,
                                    Model model) {
+        if (action.equals("findGroup")){
         List<Group>groupRez=datafinderService.findGroupByName(groupNumber,groupPostfix);
         redirectAttrs.addFlashAttribute("groupRez",groupRez);
+        }
+        if (action.equals("upAllGroup")){
+            datafinderService.upAllGroup();
+        }
         return "redirect:/admin/Groups/"+pageNo;
         //return new RedirectView("/admin/adminUserListPage/"+pageNo);
     }
@@ -387,10 +393,14 @@ public class AdminController {
             datafinderService.deleteUserFromGroup(id,dataId);
         }
         if (action.equals("deleteGroup")){
-            System.out.println("time to fan");
             datafinderService.deleteGroupFromDB(id);
             return "redirect:/admin/Groups/1";
         }
+        if (action.equals("upGroup")){
+            datafinderService.upGroup(id);
+            return "redirect:/admin/Groups/1";
+        }
+
         return "redirect:/admin/Groups/Group/"+id;
     }
 /*

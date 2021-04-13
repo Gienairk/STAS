@@ -62,6 +62,17 @@ public class Group {
         this.fullname=fullname;
 
     }
+    public void upCourse(){
+      /*  String promName=this.fullname;
+        Long prName=Long.parseLong(promName);
+        this.fullname=promName+100;*/
+        Long prName=Long.parseLong(this.number);
+        this.number=String.valueOf(prName+100);
+        String[] postfix=fullname.split("-");
+        this.fullname=number+"-"+postfix[1];
+        this.courseNumber++;
+
+    }
 
     public String getFullname() {
         return fullname;

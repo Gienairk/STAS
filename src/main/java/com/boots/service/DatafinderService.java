@@ -178,6 +178,7 @@ public class DatafinderService {
 
     public void deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
+            System.out.println("удаляю "+userId);
             //Optional<User> user=userRepository.findById(userId);
             userRepository.deleteById(userId);
         }
@@ -194,7 +195,6 @@ public class DatafinderService {
             }
 
             groupRepository.delete(group);
-
         }
     }
 
@@ -306,5 +306,39 @@ public class DatafinderService {
 
     public List<Postfix> findPostfix(String name) {
         return postfixRepository.getAllByName(name);
+    }
+
+    public void upGroup(Long id) {
+        Optional<Group> groupOptional=groupRepository.findById(id);
+        Group group=groupOptional.get();
+        group.upCourse();
+        if (group.getCourseNumber()>group.getPostfixId().getDuration())
+            deleteGroupFromDB(id);
+        else
+            groupRepository.save(group);
+    }
+    public void upGroup(Group group) {
+        group.upCourse();
+        if (group.getCourseNumber()>group.getPostfixId().getDuration()) {
+            System.out.println("я удаляю");
+            List<User> userList=new ArrayList<>(group.getUsers());
+            Long id;
+            for (int i = 0; i <userList.size() ; i++) {
+                id=userList.get(i).getId();
+                deleteUserFromGroups(id);
+                deleteUserFromChats(id);
+                deleteUser(id);
+            }
+            groupRepository.delete(group);
+        }
+        else
+            groupRepository.save(group);
+    }
+
+    public void upAllGroup() {
+        List<Group> groupList=groupRepository.findAll();
+        for (int i = 0; i <groupList.size() ; i++) {
+            upGroup(groupList.get(i));
+        }
     }
 }

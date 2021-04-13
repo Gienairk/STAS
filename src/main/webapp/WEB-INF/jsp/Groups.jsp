@@ -14,6 +14,7 @@
         <form action="${pageContext.request.contextPath}/admin/Groups/${currentPage}"  method="post">
             <input id="groupNumber" name="groupNumber" type="text" placeholder="Номер группы"/>
             <input id="groupPostfix" name="groupPostfix" type="text" placeholder="Постфикс группы"/>
+            <input type="hidden" name="action" value="findGroup"/>
             <button type="submit">Найти</button>
         </form>
     </div>
@@ -42,6 +43,12 @@
     <c:if test="${currentPage+1<=totalPages}">
         <a href="/admin/Groups/${currentPage+1}">Next</a>
     </c:if>
+    <div>
+        <form action="${pageContext.request.contextPath}/admin/Groups/${currentPage}"   method="post">
+            <input type="hidden" name="action" value="upAllGroup"/>
+            <button type="submit" onclick="return confirm('повысить курс всех групп, при этом группы и студенты которые выпустились будут удалены, если вы хотите оставить данные студента в базе, то в начале удалите его из группы  ?')">Повысить курс всех групп</button>
+        </form>
+    </div>
     </c:if>
 </div>
 </body>
