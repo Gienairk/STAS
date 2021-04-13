@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -161,6 +162,7 @@ public class DatafinderService {
         return false;
     }
 
+
     public Set<Group> allGroupWhereSubjectNotNull() {
         return groupRepository.findAllBySubjectsNotNull();
     }
@@ -178,6 +180,21 @@ public class DatafinderService {
         if (userRepository.findById(userId).isPresent()) {
             //Optional<User> user=userRepository.findById(userId);
             userRepository.deleteById(userId);
+        }
+    }
+    public void deleteGroupFromDB(Long groupId) {
+        if (groupRepository.findById(groupId).isPresent()){
+            Optional<Group> groupOb = groupRepository.findById(groupId);
+            Group group=groupOb.get();
+            group.getSubjects().clear();
+
+            List<User>users=new ArrayList<>(group.getUsers());
+            for (int i = 0; i <users.size() ; i++) {
+                deleteUserFromGroup(groupId,users.get(i).getId());
+            }
+
+            groupRepository.delete(group);
+
         }
     }
 
@@ -287,4 +304,7 @@ public class DatafinderService {
     }
 
 
+    public List<Postfix> findPostfix(String name) {
+        return postfixRepository.getAllByName(name);
+    }
 }

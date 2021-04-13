@@ -41,14 +41,14 @@
         <td>${group.id}</td>
         <td>${group.courseNumber}</td>
         <td>${group.number}</td>
-        <td>
+        <!--<td>
           <form action="${pageContext.request.contextPath}/admin/adminGroup" method="post">
             <input type="hidden" name="groupId" value="${group.id}"/>
             <input type="hidden" name="action" value="delete"/>
             <button type="submit">Delete</button>
           </form>
 
-        </td>
+        </td>-->
 
       </tr>
     </c:forEach>

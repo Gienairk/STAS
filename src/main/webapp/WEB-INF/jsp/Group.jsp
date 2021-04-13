@@ -32,13 +32,20 @@
     <td >${groupdata.toStringForPage()}</td>
       <td>
         <form action="${pageContext.request.contextPath}/admin/Groups/Group/${Group.id}"  method="post">
-      <input type="hidden" name="dataId" value="${groupdata.id}"/>
-      <input type="hidden" name="action" value="deleteSubject"/>
-      <button type="submit">убрать</button>
-    </form>
+          <input type="hidden" name="dataId" value="${groupdata.id}"/>
+          <input type="hidden" name="action" value="deleteSubject"/>
+          <button type="submit">убрать</button>
+        </form>
       </td >
     </tr>
   </c:forEach>
+  </table>
+    <div>
+      <form action="${pageContext.request.contextPath}/admin/Groups/Group/${Group.id}"  method="post">
+        <input type="hidden" name="action" value="deleteGroup"/>
+        <button type="submit">удалить группу</button>
+      </form>
+    </div>
   <div><a href="/">Главная</a></div>
 </div>
 </body>

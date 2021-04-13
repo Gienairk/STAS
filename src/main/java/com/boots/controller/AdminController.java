@@ -131,8 +131,7 @@ public class AdminController {
                            @RequestParam(required = false, defaultValue = "" ) Long duration,
                            Model model) {
         if (action.equals("delete")){
-            System.out.println("*-------------------------------*");
-            System.out.println(postfixId);
+
             datafinderService.deletePostfix(postfixId);
         }
         if (action.equals("create")){
@@ -276,9 +275,6 @@ public class AdminController {
         if (action.equals("create")){
             Subject subjectob=datafinderService.findSubjectbyname(subject);
             Group groupob=datafinderService.findGroupbyFullName(group);
-            System.out.println(groupob.getId());
-            System.out.println(groupob.getNumber());
-            System.out.println(groupob.getCourseNumber());
             groupob.addSubject(subjectob);
             datafinderService.createGroup(groupob);
         }
@@ -300,9 +296,9 @@ public class AdminController {
             Group group=new Group(groupNumber,coursenumber,postfixobj,departmentobj,groupNumber+"-"+postfix);
             datafinderService.createGroup(group);
         }
-        if (action.equals("delete")){
+        /*if (action.equals("delete")){
             datafinderService.deleteGroup(groupId);
-        }
+        }*/
         return "redirect:/admin/GroupCreate";
     }
 /*
@@ -331,6 +327,23 @@ public class AdminController {
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("postfixList",postfixList);
         return "postfix";
+    }
+
+    @PostMapping("/admin/PostfixPage/{pageNo}")
+    public String actionPostfixInBase(@PathVariable (value = "pageNo") int pageNo,
+                                   @RequestParam(required = false, defaultValue = "" ) String name,
+                                   @RequestParam(required = false, defaultValue = "" ) Long id,
+                                   @RequestParam(required = true, defaultValue = "" ) String action,
+                                   RedirectAttributes redirectAttrs,
+                                   Model model) {
+        if (action.equals("delete")){
+           datafinderService.deletePostfix(id);//для удаляния в начале надо убрать все связанные группы
+        }
+        if (action.equals("find")){
+            List<Postfix>postfixList=datafinderService.findPostfix(name);
+            redirectAttrs.addFlashAttribute("postfix",postfixList);
+        }
+        return "redirect:/admin/PostfixPage/"+pageNo;
     }
 
     @RequestMapping("/admin/Groups/{pageNo}")
@@ -372,6 +385,11 @@ public class AdminController {
         }
         if (action.equals("deleteUser")){
             datafinderService.deleteUserFromGroup(id,dataId);
+        }
+        if (action.equals("deleteGroup")){
+            System.out.println("time to fan");
+            datafinderService.deleteGroupFromDB(id);
+            return "redirect:/admin/Groups/1";
         }
         return "redirect:/admin/Groups/Group/"+id;
     }

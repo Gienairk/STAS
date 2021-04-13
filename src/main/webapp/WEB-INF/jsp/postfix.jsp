@@ -25,6 +25,23 @@
      <th>Название</th>
      <th>Длительность</th>
      </thead>
+      <c:if test="${fn:length(postfix)!=0}">
+          <c:forEach items="${postfix}" var="subject">
+              <tr>
+                  <td>${subject.id}</td>
+                  <td>${subject.name}</td>
+                  <td>${subject.duration}</td>
+                  <td>
+                      <form action="${pageContext.request.contextPath}/admin/PostfixPage/${currentPage}"  method="post">
+                          <input type="hidden" name="id" value="${subject.id}"/>
+                          <input type="hidden" name="action" value="delete"/>
+                          <button type="submit">Delete</button>
+                      </form>
+                  </td>
+              </tr>
+          </c:forEach>
+      </c:if>
+      <c:if test="${fn:length(postfix)==0}">
       <c:forEach items="${postfixList}" var="subject">
        <tr>
          <td>${subject.id}</td>
@@ -32,7 +49,7 @@
          <td>${subject.duration}</td>
             <td>
            <form action="${pageContext.request.contextPath}/admin/PostfixPage/${currentPage}"  method="post">
-                <input type="hidden" name="userId" value="${subject.id}"/>
+                <input type="hidden" name="id" value="${subject.id}"/>
                 <input type="hidden" name="action" value="delete"/>
                 <button type="submit">Delete</button>
               </form>
@@ -42,13 +59,14 @@
   </table>
     <div>Всего ${totalPages} страниц</div>
     <c:if test="${currentPage-1>0}">
-      <a href="/admin/adminUserListPage/${currentPage-1} ">Prev</a>
+      <a href="/admin/PostfixPage/${currentPage-1} ">Prev</a>
     </c:if>
     <c:if test="${currentPage+1<=totalPages}">
-        <a href="/admin/adminUserListPage/${currentPage+1}">Next</a>
+        <a href="/admin/PostfixPage/${currentPage+1}">Next</a>
     </c:if>
     </c:if>
-  <a href="/">Главная</a>
+    <div>
+  <a href="/">Главная</a></div>
 </div>
 </body>
 </html>
