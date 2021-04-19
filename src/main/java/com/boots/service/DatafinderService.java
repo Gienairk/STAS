@@ -320,14 +320,13 @@ public class DatafinderService {
     public void upGroup(Group group) {
         group.upCourse();
         if (group.getCourseNumber()>group.getPostfixId().getDuration()) {
-            System.out.println("я удаляю");
             List<User> userList=new ArrayList<>(group.getUsers());
             Long id;
             for (int i = 0; i <userList.size() ; i++) {
                 id=userList.get(i).getId();
                 deleteUserFromGroups(id);
-                deleteUserFromChats(id);
-                deleteUser(id);
+                //deleteUserFromChats(id);
+               // deleteUser(id);
             }
             groupRepository.delete(group);
         }

@@ -128,7 +128,11 @@ ul {
 }
 #ChatList{
     overflow-y: scroll;
+    background: #86BB71;
     height: 575px
+}
+.name{
+
 }
 
 .chat .chat-history .message-data {
@@ -202,7 +206,7 @@ ul {
 }
 
 .newMessage{
-    background: red;
+    background: chartreuse;
 }
 
 #addUser{

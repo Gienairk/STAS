@@ -145,11 +145,11 @@ public class ChatAppController {
 
     @MessageMapping("chat/updateRoom/{userName}")
     public void updateRoom(@DestinationVariable String userName,@Payload String chatRoomName){
-        System.out.println("===============");
+       /* System.out.println("===============");
         System.out.println("userName= "+userName);
         System.out.println("chatRoomname= "+chatRoomName);
 
-        System.out.println("===============");
+        System.out.println("===============");*/
         messagingTemplateTest.convertAndSend("/topic/chat/"+userName , chatRoomName);
     }
 
