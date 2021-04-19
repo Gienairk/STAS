@@ -2,6 +2,7 @@ package com.boots.controller;
 
 
 import com.boots.entity.ChatRoom;
+import com.boots.entity.ChatRoomFormat;
 import com.boots.entity.Message;
 import com.boots.entity.User;
 import com.boots.service.ChatService;
@@ -18,10 +19,7 @@ import org.springframework.stereotype.Controller;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.String.format;
 @Controller
@@ -202,7 +200,7 @@ public class ChatAppController {
     }
 
     @SubscribeMapping("chat/{userName}/getChats")
-    public  Map<String,Boolean> getUserRoom(@DestinationVariable String userName)
+    public  List<ChatRoomFormat> getUserRoom(@DestinationVariable String userName)
     {
         /*List<ChatRoom> test= chatService.UserRoom(userName);
         List<String> name=new ArrayList<>();
@@ -210,8 +208,13 @@ public class ChatAppController {
             name.add(test.get(i).getRoomName());
         }
         return name;*/
-        Map<String,Boolean> test= chatService.UserRoom(userName);
-        return test;
+        List<ChatRoomFormat> chatRoomFormatData=chatService.UserRoomTest(userName);
+      Collections.sort(chatRoomFormatData);
+        for (int i = 0; i < chatRoomFormatData.size(); i++) {
+            System.out.println(chatRoomFormatData.get(i).toString());
+        }
+        //Map<String,Boolean> test= chatService.UserRoom(userName);
+        return chatRoomFormatData;
     }
 
 }

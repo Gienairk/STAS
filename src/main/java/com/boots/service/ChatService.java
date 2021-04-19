@@ -200,4 +200,43 @@ public class ChatService {
     }
 
 
+    public List<ChatRoomFormat> UserRoomTest(String userName) {
+        User user=userRepository.findByUsername(userName);
+        // Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
+        List<UserChatRoom> userChatRoomList=userChatRoomRepository.getAllByUser(user);;
+        Map<String,Boolean> chatMessageMap=new HashMap<String,Boolean>();
+        List<ChatRoomFormat> chatRoomFormat=new ArrayList<>();
+        List<Message> messages=new ArrayList<>();
+        UserChatRoom userChatRoomprom;
+        Message ms;
+        LocalDateTime first;
+        LocalDateTime second;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy");
+        for (int i = 0; i <userChatRoomList.size() ; i++) {
+            messages=messageRepository.getAllByChatRoom(userChatRoomList.get(i).getChatRoom());
+            userChatRoomprom=userChatRoomList.get(i);
+            if (messages.size()>0 && userChatRoomprom.getTime()!=null){
+                ms=messages.get(messages.size()-1);
+                first=LocalDateTime.parse(ms.getDate(),formatter);
+                second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);;
+                //chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
+                chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second),ms.getDate()));
+            }
+            else {
+                chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"0"));
+                //chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
+            }
+        }
+
+        /*
+        List <ChatRoom> answer=new ArrayList<>();
+        for (int i = 0; i <userChatRoomList.size() ; i++) {
+            answer.add(userChatRoomList.get(i).getChatRoom());
+        }
+        System.out.println(answer);*/
+
+        return chatRoomFormat;
+    }
+
+
 }

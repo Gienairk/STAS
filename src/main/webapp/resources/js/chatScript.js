@@ -97,7 +97,7 @@ function updateRoom(payload){
     console.log(payload)
     var room = payload.body;
     console.log(room)
-    let usersTemplateHTML='<a href="#" onclick="enterRoom(\''+room+'\')" <li class="clearfix">\n' +
+    let usersTemplateHTML='<a id="ChatRoomContainer_' + room + '" href="#" onclick="enterRoom(\''+room+'\')" <li class="clearfix">\n' +
         '                <div class="about">\n' +
         '                     <div id="userNameAppender_' + room + '" class="name">' + room + '</div>\n' +
         '                    <div class="status">\n' +
@@ -119,12 +119,26 @@ function messageClientConnected(){
 function messageRecover(payload){
     console.log(payload.body)
     var whatChat=payload.body;
-    let elem=document.getElementById('userNameAppender_'+whatChat)
-    console.log(roomId)
-    console.log(whatChat)
+    chatToTop(whatChat);
     if (roomId!=whatChat) {
+        newMessageSound();
+        let elem=document.getElementById('userNameAppender_'+whatChat)
         elem.classList.add('newMessage');
     }
+}
+
+function chatToTop(roomName){
+    let elem=document.getElementById('ChatRoomContainer_'+roomName)
+    elem.remove();
+    let usersTemplateHTML='<a id="ChatRoomContainer_' + roomName + '"  href="#" onclick="enterRoom(\''+roomName+'\')" <li class="clearfix">\n' +
+        '                <div class="about">\n' +
+        '                     <div id="userNameAppender_' + roomName + '" class="name">' + roomName + '</div>\n' +
+        '                    <div class="status">\n' +
+        '                        <i class="fa fa-circle online"></i>\n' +
+        '                    </div>\n' +
+        '                </div>\n' +
+        '            </li></a>'+$('#ChatList').html();
+    $('#ChatList').html(usersTemplateHTML);
 }
 
 function roomClientConnected() {
@@ -133,15 +147,17 @@ function roomClientConnected() {
 }
 
 function onListofRoom(payload) {
+    var listRoom =JSON.parse(payload.body);
     let map = new Map()
-    var listRoom = JSON.parse(payload.body);
+    /*var listRoom = JSON.parse(payload.body);
     for (var value in listRoom) {
         map.set(value,listRoom[value])
-    }
+    }*/
     let usersTemplateHTML="";
-    for (let [key, value] of map) {
-       if (value){
-           usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
+    for (let i = 0; i < listRoom.length; i++) {
+        var key=listRoom[i].chatname;
+        if (listRoom[i].haveNewMessage){
+           usersTemplateHTML=usersTemplateHTML+'<a id="ChatRoomContainer_' + key + '" href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
                '                <div class="about">\n' +
                '                     <div id="userNameAppender_' + key + '" class="name newMessage">' + key + '</div>\n' +
                '                    <div class="status">\n' +
@@ -150,7 +166,7 @@ function onListofRoom(payload) {
                '                </div>\n' +
                '            </li></a>';
        }else{
-           usersTemplateHTML=usersTemplateHTML+'<a href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
+           usersTemplateHTML=usersTemplateHTML+'<a id="ChatRoomContainer_' + key + '" href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
                '                <div class="about">\n' +
                '                     <div id="userNameAppender_' + key + '" class="name">' + key + '</div>\n' +
                '                    <div class="status">\n' +
@@ -160,8 +176,6 @@ function onListofRoom(payload) {
                '            </li></a>';
        }
     }
-
-
     $('#ChatList').html(usersTemplateHTML);
 }
 
@@ -242,7 +256,12 @@ function onPreviousMessage(payload) {
         showMessage(messages[i]);
     }
 }
-
+function newMessageSound(){
+    var audio = new Audio();
+    audio.src="resources/audio/message.mp3";
+    audio.volume=0.3;
+    audio.autoplay = true;
+}
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
     showMessage(message);
