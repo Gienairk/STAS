@@ -239,4 +239,13 @@ public class ChatService {
     }
 
 
+    public List<String> getUsersInChat(String roomId) {
+        ChatRoom chatRoom=chatRoomRepository.findByRoomName(roomId);
+        List<UserChatRoom> userChatRoomListList=userChatRoomRepository.findAllByChatRoom(chatRoom);
+        List<String>userList=new ArrayList<>();
+        for (int i = 0; i < userChatRoomListList.size(); i++) {
+            userList.add(userChatRoomListList.get(i).getUser().getLastName() + " " + userChatRoomListList.get(i).getUser().getFirstName());
+        }
+        return userList;
+    }
 }

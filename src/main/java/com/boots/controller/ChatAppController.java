@@ -216,5 +216,13 @@ public class ChatAppController {
         //Map<String,Boolean> test= chatService.UserRoom(userName);
         return chatRoomFormatData;
     }
+    @SubscribeMapping("chat/{roomId}/getUsers")
+    public  List<String> getUserInRoom(@DestinationVariable String roomId)
+    {
+        System.out.println("земля, как слышно?");
+        List<String> ans=chatService.getUsersInChat(roomId);
+
+       return ans;
+    }
 
 }

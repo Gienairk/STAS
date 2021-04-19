@@ -18,6 +18,7 @@ var roomName = document.querySelector('#roomName');
 var ChooseUserToAdd = document.querySelector('#addUserForm');
 var ChooseGroupToAdd = document.querySelector('#addGroupForm');
 var CreateRoomforStudent = document.querySelector('#createChatForStudentForm');
+var chatRoomUserForm = document.querySelector('#chatRoomUserForm');
 var stompClient = null;
 var currentSubscription;
 
@@ -259,7 +260,7 @@ function onPreviousMessage(payload) {
 function newMessageSound(){
     var audio = new Audio();
     audio.src="resources/audio/message.mp3";
-    audio.volume=0.3;
+    audio.volume=0.7;
     audio.autoplay = true;
 }
 function onMessageReceived(payload) {
@@ -283,7 +284,6 @@ function formatDate(date) {
         min="00"
     return hh+":"+min+" "+dd + '.' + mm + '.' + yy ;
 }
-
 
 function getCurrentTime() {
     var d = new Date();
@@ -377,7 +377,6 @@ function addUserToChatFunction(){
     var data={
         roomName:roomId,
     };
-    console.log("addUserToChatFunction "+roomId)
     updateRoomList(userToAddValue,roomId)
     stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
 
@@ -445,7 +444,6 @@ $(document).ready(function (){
 })
 
 function leaveFromRoom(){
-    console.log(roomId)
     var data={
         roomName:roomId,
     };
@@ -456,6 +454,23 @@ function leaveFromRoom(){
     roomId=null;
     setTimeout(() => stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom), 100);
 
+}
+function showUserInRoom(){
+    stompClient.subscribe(`/app/chat/${roomId}/getUsers`, drowUserInChat)
+    chatRoomUserForm.classList.remove('hidden')
+}
+function drowUserInChat(payload){
+    var answer =JSON.parse(payload.body);
+
+    let html="";
+    for (let i = 0; i <answer.length ; i++) {
+        html+="<div>"+ answer[i] +"</div>"
+    }
+    $('#chatRoomUser').html(html);
+
+}
+function hideUserInRoom(){
+    chatRoomUserForm.classList.add('hidden')
 }
 
 $(document).on('click', '.btn.btn-primary.join', function(event){

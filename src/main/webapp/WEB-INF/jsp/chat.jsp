@@ -33,6 +33,10 @@
         <datalist id="teathers"></datalist>
         <button  id="createChatStudent" onclick="createRoomForStudent()">Добавить</button>
     </div>
+    <div id="chatRoomUserForm" class="hidden">
+        <div id="chatRoomUser"></div>
+        <button  id="hideUserInRoom" onclick="hideUserInRoom()">Скрыть</button>
+    </div>
 
 <div class="container clearfix">
     <div class="people-list" id="people-list"  items="${userRight}" var="userRight">
@@ -58,9 +62,9 @@
     <div class="chat">
         <div class="chat-header clearfix">
 
-
             <div  class="chat-about">
                 <button onclick="leaveFromRoom()">Выйти</button>
+                <button onclick="showUserInRoom()">Показать участников</button>
                 <div id="chatWith" class="chat-with">Chat with ...</div>
                 <div class="chat-num-messages"></div>
             </div>
