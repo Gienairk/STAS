@@ -131,15 +131,14 @@ public class AdminController {
                            @RequestParam(required = false, defaultValue = "" ) Long duration,
                            Model model) {
         if (action.equals("delete")){
-
             datafinderService.deletePostfix(postfixId);
         }
         if (action.equals("create")){
             datafinderService.createPostfix(postfixname,duration);
         }
         return "redirect:/admin/Postfix";
-
     }
+
     @PostMapping("/admin/adminSubject")
     public String  Subject(@RequestParam(required = false, defaultValue = "" ) Long subjectId,
                            @RequestParam(required = true, defaultValue = "" ) String action,

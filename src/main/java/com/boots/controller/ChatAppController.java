@@ -209,17 +209,18 @@ public class ChatAppController {
         }
         return name;*/
         List<ChatRoomFormat> chatRoomFormatData=chatService.UserRoomTest(userName);
+            System.out.println(chatRoomFormatData);
       Collections.sort(chatRoomFormatData);
-        for (int i = 0; i < chatRoomFormatData.size(); i++) {
-            System.out.println(chatRoomFormatData.get(i).toString());
-        }
+       // for (int i = 0; i < chatRoomFormatData.size(); i++) {
+       //     System.out.println(chatRoomFormatData.get(i).toString());
+        //}
         //Map<String,Boolean> test= chatService.UserRoom(userName);
         return chatRoomFormatData;
     }
     @SubscribeMapping("chat/{roomId}/getUsers")
     public  List<String> getUserInRoom(@DestinationVariable String roomId)
     {
-        System.out.println("земля, как слышно?");
+
         List<String> ans=chatService.getUsersInChat(roomId);
 
        return ans;

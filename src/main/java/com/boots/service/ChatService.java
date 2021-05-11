@@ -204,7 +204,7 @@ public class ChatService {
         User user=userRepository.findByUsername(userName);
         // Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
         List<UserChatRoom> userChatRoomList=userChatRoomRepository.getAllByUser(user);;
-        Map<String,Boolean> chatMessageMap=new HashMap<String,Boolean>();
+        //Map<String,Boolean> chatMessageMap=new HashMap<String,Boolean>();
         List<ChatRoomFormat> chatRoomFormat=new ArrayList<>();
         List<Message> messages=new ArrayList<>();
         UserChatRoom userChatRoomprom;
@@ -223,7 +223,8 @@ public class ChatService {
                 chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second),ms.getDate()));
             }
             else {
-                chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"0"));
+                if(userChatRoomprom.getChatRoom().getRoomName()!=null)//HH:mm:ss dd.MM.yyyy 00:00:00 01.01.1999
+                chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"00:00:00 01.01.1999"));
                 //chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
             }
         }

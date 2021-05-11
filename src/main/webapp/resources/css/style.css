@@ -45,7 +45,26 @@ body {
     width: 90%;
     font-size: 14px;
 }
-
+.name{
+    width:100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    border-radius: 50px;
+    background: #72bbaf;
+    box-shadow: inset 20px 20px 60px #619f95,
+    inset -20px -20px 60px #83d7c9;
+}
+.newMessage{
+    width:100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    border-radius: 50px;
+    background: #eea811;
+    box-shadow: inset 20px 20px 60px #ca8f0e,
+    inset -20px -20px 60px #ffc114;
+}
 .people-list .fa-search {
     position: relative;
     left: -25px;
@@ -123,27 +142,39 @@ ul {
     padding: 30px 30px 20px;
     border-bottom: 2px solid white;
     overflow-y: scroll;
-
+    width: 490px;
     height: 575px;
 }
+.chat-history::-webkit-scrollbar{
+    width:1px;
+}
+
 #ChatList{
     overflow-y: scroll;
     background: #86BB71;
     height: 575px
 }
-.name{
-
+#ChatList::-webkit-scrollbar{
+    width: 1px;
 }
 
 .chat .chat-history .message-data {
     margin-bottom: 15px;
+}
+.message-data-my{
+    text-align: end;
+    margin-bottom: 15px;
+    margin-right:40px;
 }
 
 .chat .chat-history .message-data-time {
     color: #a8aab1;
     padding-left: 6px;
 }
-
+.message-data-time-my{
+    color: #a8aab1;
+    padding-right: 6px;
+}
 .chat .chat-history .message {
     color: white;
     padding: 18px 20px;
@@ -168,9 +199,36 @@ ul {
     border-width: 10px;
     margin-left: -10px;
 }
+.test{
+    color: white;
+    padding: 18px 20px;
+    line-height: 26px;
+    font-size: 16px;
+    border-radius: 7px;
+    margin-bottom: 30px;
+    width: 90%;
+    position: relative;
+}
+.test:after{
+    bottom: 100%;
+    right: 7%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: #6cc4ea;
+    border-width: 10px;
+    margin-left: -10px;
+}
+
 
 .chat .chat-history .my-message {
     background: #86BB71;
+}
+.my-message-from-my{
+    background: #6cc4ea;
 }
 
 .chat .chat-history .other-message {
@@ -205,9 +263,7 @@ ul {
     cursor: pointer;
 }
 
-.newMessage{
-    background: chartreuse;
-}
+
 
 #addUser{
     float: left;
@@ -225,6 +281,23 @@ ul {
     font-weight: bold;
     background: #F2F5F8;
 }
+.button{
+    color: #94C2ED;
+    font-size: 14px;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    background: #444753;
+}
+.buttont{ color: #94C2ED;
+    font-size: 14px;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    background: #f2f5f8;}
+
 
 .chat .chat-message button:hover {
     color: #75b1e8;
@@ -260,6 +333,7 @@ ul {
 }
 
 .clearfix:after {
+    background: #E38968;
     visibility: hidden;
     display: block;
     font-size: 0;

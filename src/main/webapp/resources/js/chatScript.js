@@ -118,7 +118,6 @@ function messageClientConnected(){
     messageSubscription=messageClient.subscribe(`/topic/newMessage/`+userName, messageRecover);
 }
 function messageRecover(payload){
-    console.log(payload.body)
     var whatChat=payload.body;
     chatToTop(whatChat);
     if (roomId!=whatChat) {
@@ -160,7 +159,7 @@ function onListofRoom(payload) {
         if (listRoom[i].haveNewMessage){
            usersTemplateHTML=usersTemplateHTML+'<a id="ChatRoomContainer_' + key + '" href="#" onclick="enterRoom(\''+key+'\')" <li class="clearfix">\n' +
                '                <div class="about">\n' +
-               '                     <div id="userNameAppender_' + key + '" class="name newMessage">' + key + '</div>\n' +
+               '                     <div id="userNameAppender_' + key + '" class="newMessage">' + key + '</div>\n' +
                '                    <div class="status">\n' +
                '                        <i class="fa fa-circle online"></i>\n' +
                '                    </div>\n' +
@@ -188,7 +187,6 @@ function onError(error) {
 
 function createRoom(event){
     var roomNameValue=roomName.value.trim();
-
     if (roomNameValue){
          stompClient.subscribe(`/app/chat/${roomNameValue}/CreateRoom`, getAnswerRoom);
     }
@@ -223,13 +221,19 @@ function enterRoom(newRoomId){
     chatWith.textContent=newRoomId;
     topic = `/app/chat/${newRoomId}`;
     let elem=document.getElementById('userNameAppender_'+newRoomId)
-    if (elem.classList!=null)
+    if (elem.classList!=null){
         elem.classList.remove('newMessage')
+        elem.classList.add('message')
+    }
     if (currentSubscription){
         currentSubscription.unsubscribe();
     }
     stompClient.subscribe(`/app/chat/${roomId}/getPrevious`, onPreviousMessage);
     currentSubscription=stompClient.subscribe(`/topic/${roomId}`,onMessageReceived);
+    elem=document.getElementById('leaveRoom')
+    elem.classList.remove('hidden');
+    elem=document.getElementById('showUser')
+    elem.classList.remove('hidden');
 }
 
 function sendMessage(event){
@@ -260,7 +264,7 @@ function onPreviousMessage(payload) {
 function newMessageSound(){
     var audio = new Audio();
     audio.src="resources/audio/message.mp3";
-    audio.volume=0.7;
+    audio.volume=0.6;
     audio.autoplay = true;
 }
 function onMessageReceived(payload) {
@@ -294,7 +298,10 @@ function showMessage(message){
     if (message.date==null){
         message.date=getCurrentTime()
     }
-    var templateResponse = Handlebars.compile($("#message-response-template").html());
+    if (message.fromLogin==userName)
+        var templateResponse = Handlebars.compile($("#message-response-template-from-my").html());
+    else
+        var templateResponse = Handlebars.compile($("#message-response-template").html());
     var contextResponse = {
         response: message.message,
         time: message.date,
@@ -453,7 +460,10 @@ function leaveFromRoom(){
     currentSubscription.unsubscribe();
     roomId=null;
     setTimeout(() => stompClient.subscribe(`/app/chat/${userName}/getChats`, onListofRoom), 100);
-
+    let elem=document.getElementById('leaveRoom')
+    elem.classList.add('hidden');
+    elem=document.getElementById('showUser')
+    elem.classList.add('hidden');
 }
 function showUserInRoom(){
     stompClient.subscribe(`/app/chat/${roomId}/getUsers`, drowUserInChat)

@@ -43,14 +43,14 @@
         <div class="search">
             <c:if test="${ userRight == 'Admin'|| userRight == 'Teather'}">
                 <form id="chooseRoomName" name="chooseRoomName">
-                    <a id="userName"   type="text"></a>
-                    <button onclick="">Create chat</button>
+                    <a id="userName" class="button"  type="text"></a>
+                    <button onclick="" class="button">Создать </button>
                 </form>
             </c:if>
             <c:if test="${ userRight == 'Student'}">
                 <form id="chooseRoomNameStudent" name="chooseRoomNameStudent">
-                    <a id="userName"  type="text"></a>
-                    <button onclick="createRoomStudent()">Create chat</button>
+                    <a id="userName"   type="text"></a>
+                    <button onclick="createRoomStudent()" class="button"> Создать </button>
                 </form>
             </c:if>
         </div>
@@ -63,9 +63,10 @@
         <div class="chat-header clearfix">
 
             <div  class="chat-about">
-                <button onclick="leaveFromRoom()">Выйти</button>
-                <button onclick="showUserInRoom()">Показать участников</button>
-                <div id="chatWith" class="chat-with">Chat with ...</div>
+                <div id="chatWith" class="chat-with">Чат с ...</div>
+                <button onclick="leaveFromRoom()" class="hidden buttont" id="leaveRoom">Выйти</button>
+                <button onclick="showUserInRoom()" class="hidden buttont" id="showUser">Показать участников</button>
+
                 <div class="chat-num-messages"></div>
             </div>
 
@@ -74,7 +75,7 @@
             <div class="form-group">
                 <div class="input-group clearfix">
                     <input type="text" id="roomName" name="roomName" placeholder="Enter Chat Room name" autocomplete="off" class="form-control"/>
-                    <button type="submit" class="btn btn-primary">Create Room</button>
+                    <button type="submit" class="btn btn-primary">Создать комнату</button>
                 </div>
             </div>
         </form>
@@ -90,12 +91,13 @@
         <div class="chat-message clearfix">
             <form id="messageForm" name="messageForm">
                 <textarea id="message-to-send" name="message-to-send" placeholder="Type your message" rows="3"></textarea>
-                <button id="sendBtn" type="submit">Send</button>
+                <button id="sendBtn" type="submit">Отправить</button>
+                <c:if test="${ userRight == 'Admin'|| userRight == 'Teather'}">
+                    <button id="addUser" onclick="addUserFormOpen()" >Добавить пользователя</button>
+                    <button id="addGroup" onclick="addGroupFormOpen()">Добавить группу</button>
+                </c:if>
             </form>
-        <c:if test="${ userRight == 'Admin'|| userRight == 'Teather'}">
-            <button id="addUser" onclick="addUserFormOpen()" >add user</button>
-            <button id="addGroup" onclick="addGroupFormOpen()">add group</button>
-        </c:if>
+
 
         </div> <!-- end chat-message -->
     </div> <!-- end chat -->
@@ -114,7 +116,17 @@
         </div>
     </li>
 </script>
-
+    <script id="message-response-template-from-my" type="text/x-handlebars-template">
+        <li>
+            <div class="message-data-my">
+                <span class="message-data-time-my">{{time}}</span>
+                <span class="message-data-name-my"><i class="fa fa-circle online"></i> {{userName}}</span>
+            </div>
+            <div class="test my-message-from-my">
+                {{response}}
+            </div>
+        </li>
+    </script>
 <script type="text/javascript" src="${contextPath}/resources/js/chatScript.js"></script>
 
 </body>
