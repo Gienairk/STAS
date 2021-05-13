@@ -320,7 +320,10 @@ function chatCleaner(){
 }
 
 function chooseChatName(event){
-    createRoomForm.classList.remove('hidden')
+    if (createRoomForm.classList.contains('hidden'))
+        createRoomForm.classList.remove('hidden')
+    else
+        createRoomForm.classList.add('hidden')
     event.preventDefault();
 }
 
@@ -329,8 +332,11 @@ function scrollToBottom() {
 }
 
 function addUserFormOpen(){
+    if (ChooseUserToAdd.classList.contains('hidden')){
     ChooseUserToAdd.classList.remove('hidden');
-    stompClient.subscribe(`/app/chat/getUserList`, getUserToAdd);
+    stompClient.subscribe(`/app/chat/getUserList`, getUserToAdd);}
+    else
+        ChooseUserToAdd.classList.add('hidden');
 }
 function getUserToAdd(payload){
     var user = JSON.parse(payload.body);
@@ -370,8 +376,11 @@ function logOut(){
 }
 
 function addGroupFormOpen(){
+    if (ChooseGroupToAdd.classList.contains('hidden')){
     ChooseGroupToAdd.classList.remove('hidden');
-    stompClient.subscribe(`/app/chat/getGroupList`, getGroupToAdd);
+    stompClient.subscribe(`/app/chat/getGroupList`, getGroupToAdd);}
+    else
+        ChooseGroupToAdd.classList.add('hidden');
 }
 
 function addGroupToChatFunction(){
@@ -441,8 +450,11 @@ function getAnswerRoomStudent(payload){
 }
 
 function createRoomStudent(){
+    if (CreateRoomforStudent.classList.contains('hidden')){
     CreateRoomforStudent.classList.remove('hidden')
-    stompClient.subscribe(`/app/chat/getTeatherList`, getTeatherToAdd);
+    stompClient.subscribe(`/app/chat/getTeatherList`, getTeatherToAdd);}
+    else
+        CreateRoomforStudent.classList.add('hidden')
     event.preventDefault();
 }
 
@@ -473,8 +485,12 @@ function leaveFromRoom(){
     elem.classList.add('hidden');
 }
 function showUserInRoom(){
+    if (chatRoomUserForm.classList.contains('hidden')){
     stompClient.subscribe(`/app/chat/${roomId}/getUsers`, drowUserInChat)
     chatRoomUserForm.classList.remove('hidden')
+    }
+    else
+        chatRoomUserForm.classList.add('hidden')
 }
 function drowUserInChat(payload){
     var answer =JSON.parse(payload.body);

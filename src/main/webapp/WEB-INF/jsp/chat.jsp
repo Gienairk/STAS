@@ -16,26 +16,11 @@
 </head>
 <body>
 
-    <div id="addUserForm" class="hidden">
-            <input list="student" name="studentName" id="studentName">
-            <datalist id="student"></datalist>
-            <button  id="addUserToChat" onclick="addUserToChatFunction()">Добавить</button>
-    </div>
-    <div id="addGroupForm" class="hidden">
-        <input list="group" name="groupName" id="groupName">
-        <datalist id="group"></datalist>
-        <button  id="addGroupToChat" onclick="addGroupToChatFunction()">Добавить</button>
-    </div>
 
-    <div id="createChatForStudentForm" class="hidden">
-        <input type="text" id="roomNameStudent" name="roomNameStudent" placeholder="Enter Chat Room name" autocomplete="off" class="form-control"/>
-        <input list="teathers" name="teathersName" id="teathersName">
-        <datalist id="teathers"></datalist>
-        <button  id="createChatStudent" onclick="createRoomForStudent()">Добавить</button>
-    </div>
+
+
     <div id="chatRoomUserForm" class="hidden">
         <div id="chatRoomUser"></div>
-        <button  id="hideUserInRoom" onclick="hideUserInRoom()">Скрыть</button>
     </div>
 
 <div class="container clearfix">
@@ -83,10 +68,29 @@
         <form id="createRoomForm" name="createRoomForm" class="hidden" >
             <div class="form-group">
                 <div class="input-group clearfix">
-                    <input type="text" id="roomName" name="roomName" placeholder="Enter Chat Room name" autocomplete="off" class="form-control"/>
+                    <input type="text" id="roomName" name="roomName" placeholder="Введите нзвание комнаты" autocomplete="off" class="form-control"/>
                     <button type="submit" class="btn btn-primary">Создать комнату</button>
                 </div>
             </div>
+        </form>
+        <div id="addUserForm" class="hidden">
+            <input list="student" name="studentName" id="studentName">
+            <datalist id="student"></datalist>
+            <button  id="addUserToChat" onclick="addUserToChatFunction()">Добавить</button>
+        </div>
+        <div id="addGroupForm" class="hidden">
+            <input list="group" name="groupName" id="groupName">
+            <datalist id="group"></datalist>
+            <button  id="addGroupToChat" onclick="addGroupToChatFunction()">Добавить</button>
+        </div>
+        <div id="createChatForStudentForm" class="hidden">
+            <input type="text" id="roomNameStudent" name="roomNameStudent" placeholder="Введите название комнаты" autocomplete="off" class="form-control"/>
+            <input list="teathers" name="teathersName" id="teathersName">
+            <datalist id="teathers"></datalist>
+            <button  id="createChatStudent" onclick="createRoomForStudent()">Добавить</button>
+        </div>
+        <form>
+
         </form>
         <div class="chat-history">
             <ul id="messageArea">
