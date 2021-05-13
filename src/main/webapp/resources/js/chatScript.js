@@ -223,7 +223,7 @@ function enterRoom(newRoomId){
     let elem=document.getElementById('userNameAppender_'+newRoomId)
     if (elem.classList!=null){
         elem.classList.remove('newMessage')
-        elem.classList.add('message')
+        elem.classList.add('name')
     }
     if (currentSubscription){
         currentSubscription.unsubscribe();
@@ -360,6 +360,13 @@ function getGroupToAdd(payload){
     }
     console.log(usersTemplateHTML);
     $('#group').html(usersTemplateHTML);
+}
+
+function goToMain(){
+    document.location.href = "/";
+}
+function logOut(){
+    document.location.href = "/logout";
 }
 
 function addGroupFormOpen(){

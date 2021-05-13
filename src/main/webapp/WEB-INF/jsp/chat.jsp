@@ -57,7 +57,16 @@
 
         <ul id="ChatList"class="list">
         </ul>
+        <div class="menu">
+            <button onclick="logOut()" class="button">Выйти </button><br>
+        </div>
+        <div class="menu " >
+            <c:if test="${ userRight == 'Admin'}">
+                <button onclick="goToMain()" class="button">Выйти в меню </button>
+            </c:if>
+        </div>
     </div>
+
 
     <div class="chat">
         <div class="chat-header clearfix">
@@ -101,7 +110,6 @@
 
         </div> <!-- end chat-message -->
     </div> <!-- end chat -->
-
 </div> <!-- end container -->
 
 
