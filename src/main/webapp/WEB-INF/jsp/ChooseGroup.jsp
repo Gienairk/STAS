@@ -13,19 +13,19 @@
 <div>
   <form action="${pageContext.request.contextPath}/admin/ChooseGroup" method="post">
 
-    <input list="student" name="student">
+    <select list="student" name="student">
     <datalist id="student">
       <c:forEach items="${allStudents}" var="student">
         <option >${student.firstName} ${student.secondName} ${student.lastName}</option>
       </c:forEach>
-    </datalist>
+    </datalist></select>
 
-    <input list="group" name="group">
+    <select list="group" name="group">
     <datalist id="group">
       <c:forEach items="${allGroup}" var="group">
         <option >${group.fullname}</option>
       </c:forEach>
-    </datalist>
+    </datalist></select>
 
 
     <button type="submit">Create</button>

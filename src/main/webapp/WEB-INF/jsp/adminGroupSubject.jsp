@@ -13,18 +13,18 @@
 <div>
   <form action="${pageContext.request.contextPath}/admin/adminGroupSubject" method="post">
     <input type="hidden" name="action" value="create"/>
-    <input list="group" name="group">
+    <select list="group" name="group">
     <datalist id="group">
       <c:forEach items="${allGroup}" var="group">
         <option >${group.fullname}</option>
       </c:forEach>
-    </datalist>
-    <input list="subject" name="subject">
+    </datalist></select>
+    <select list="subject" name="subject">
     <datalist id="subject">
       <c:forEach items="${allSubject}" var="subject">
         <option>${subject.name}</option>
       </c:forEach>
-    </datalist>
+    </datalist></select>
     <button type="submit">Create</button>
   </form>
 

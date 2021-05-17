@@ -205,7 +205,7 @@ function getAnswerRoom(payload){
     }
 
     else{
-        alert("This chat already exists ")
+        toastr.error("Такой чат уже есть ")
     }
 }
 
@@ -385,25 +385,32 @@ function addGroupFormOpen(){
 
 function addGroupToChatFunction(){
     var groupToAddvalue=groupToAdd.value.trim();
-    console.log(groupToAddvalue);
-    console.log(roomId);
+    var array = $('#group option').map(function () {
+        return this.value;
+    }).get();
+    if (array.indexOf(groupToAddvalue)!=-1){
     var data={
         roomName:roomId,
     };
     stompClient.send(`/app/chat/rooms/${groupToAddvalue}/addGroup`,{},JSON.stringify(data));
-    ChooseGroupToAdd.classList.add('hidden');
+    ChooseGroupToAdd.classList.add('hidden');}
+    else
+        toastr.info('Такой группы нету, проверьте данные');
 }
 function addUserToChatFunction(){
     var userToAddValue=userToAdd.value.trim();
-    console.log(userToAddValue);
-    console.log(roomId);
+    var array = $('#student option').map(function () {
+        return this.value;
+    }).get();
+    if (array.indexOf(userToAddValue)!=-1){
     var data={
         roomName:roomId,
     };
     updateRoomList(userToAddValue,roomId)
     stompClient.send(`/app/chat/rooms/${userToAddValue}`,{},JSON.stringify(data));
-
-    ChooseUserToAdd.classList.add('hidden');
+    ChooseUserToAdd.classList.add('hidden');}
+    else
+        toastr.info('Такого пользователя нету, выбирайте из списка');
 }
 function createRoomForStudent(){
     var teather=teatherToAdd.value.trim();
@@ -436,7 +443,7 @@ function getAnswerRoomStudent(payload){
         setTimeout(() => enterRoom(room), 100);
     }
     else{
-        alert("This chat already exists ")
+        toast.error("Такой чат уже есть ")
     }
     /*
 

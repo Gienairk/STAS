@@ -19,7 +19,7 @@ public class ChatController {
     @GetMapping("/chat")
     public String chat(Model model,@AuthenticationPrincipal User user) {
         model.addAttribute("userRight", user.getUserRight());
-        System.out.println("userRight "+user.getUserRight() );
+        //System.out.println("userRight "+user.getUserRight() );
         return "chat";
     }
 

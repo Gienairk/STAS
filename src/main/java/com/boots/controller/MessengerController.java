@@ -37,18 +37,18 @@ public class MessengerController {
     }
     @GetMapping("/getCurrentUser")
     public String GetCurrentUser(@AuthenticationPrincipal User user){
-        System.out.println(user.getUsername());
+        //System.out.println(user.getUsername());
         return user.getUsername();
     }
 
     @GetMapping("/getCurrentUserRight")
     public String GetCurrentUserRight(@AuthenticationPrincipal User user){
-        System.out.println(user.getUserRight());
+        //System.out.println(user.getUserRight());
         return user.getUserRight();
     }
     @MessageMapping("/chat/{to}")
     public void sendMessage(@DestinationVariable String to, Message message) {
-        System.out.println("handling send message: " + message + " to: " + to);
+       // System.out.println("handling send message: " + message + " to: " + to);
             simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
 
     }

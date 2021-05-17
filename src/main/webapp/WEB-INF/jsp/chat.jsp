@@ -6,11 +6,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"> </script>
     <!--    libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <!--    end libs for stomp and sockjs-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"
           type="text/css">
     <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/style.css">
 </head>
@@ -68,26 +71,26 @@
         <form id="createRoomForm" name="createRoomForm" class="hidden" >
             <div class="form-group">
                 <div class="input-group clearfix">
-                    <input type="text" id="roomName" name="roomName" placeholder="Введите нзвание комнаты" autocomplete="off" class="form-control"/>
-                    <button type="submit" class="btn btn-primary">Создать комнату</button>
+                    <input type="text" id="roomName" name="roomName" placeholder="Введите название комнаты" autocomplete="off" class="form-control"/>
+                    <button type="submit" class="btn btn-primary buttont">Создать комнату</button>
                 </div>
             </div>
         </form>
         <div id="addUserForm" class="hidden">
             <input list="student" name="studentName" id="studentName">
             <datalist id="student"></datalist>
-            <button  id="addUserToChat" onclick="addUserToChatFunction()">Добавить</button>
+            <button  id="addUserToChat" onclick="addUserToChatFunction()" class="buttont"  >Добавить</button>
         </div>
         <div id="addGroupForm" class="hidden">
             <input list="group" name="groupName" id="groupName">
             <datalist id="group"></datalist>
-            <button  id="addGroupToChat" onclick="addGroupToChatFunction()">Добавить</button>
+            <button  id="addGroupToChat" onclick="addGroupToChatFunction()" class="buttont">Добавить</button>
         </div>
         <div id="createChatForStudentForm" class="hidden">
             <input type="text" id="roomNameStudent" name="roomNameStudent" placeholder="Введите название комнаты" autocomplete="off" class="form-control"/>
             <input list="teathers" name="teathersName" id="teathersName">
             <datalist id="teathers"></datalist>
-            <button  id="createChatStudent" onclick="createRoomForStudent()">Добавить</button>
+            <button  id="createChatStudent" onclick="createRoomForStudent()" class="buttont">Добавить</button>
         </div>
         <form>
 
@@ -127,6 +130,7 @@
             {{response}}
         </div>
     </li>
+    <div id="toastjs"></div>
 </script>
     <script id="message-response-template-from-my" type="text/x-handlebars-template">
         <li>

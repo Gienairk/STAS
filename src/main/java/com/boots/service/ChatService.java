@@ -75,8 +75,8 @@ public class ChatService {
         Message localMessage=new Message(message);
         localMessage.setDate(newFomart);
         localMessage.setChatRoom(chatRoomRepository.findByRoomName(roomName));
-        System.out.println("localMessage "+ localMessage);
-        System.out.println("message "+ message);
+        //System.out.println("localMessage "+ localMessage);
+      //  System.out.println("message "+ message);
         messageRepository.save(localMessage);
     }
     public void saveTimeData(String time,String userName,String chatName){
@@ -103,12 +103,12 @@ public class ChatService {
     public void saveUser(String room,String user){
         ChatRoom chatRoom=chatRoomRepository.findByRoomName(room);
         User userObj=userRepository.findByUsername(user);
-        System.out.println("chatRoom "+chatRoom);
-        System.out.println("userObj "+userObj);
+       // System.out.println("chatRoom "+chatRoom);
+      //  System.out.println("userObj "+userObj);
         UserChatRoom userChatRoom=new UserChatRoom();
         userChatRoom.setChatRoom(chatRoom);
         userChatRoom.setUser(userObj);
-        System.out.println("userChatRoom "+userChatRoom);
+        //System.out.println("userChatRoom "+userChatRoom);
         if (userChatRoomRepository.getByChatRoomAndUser(chatRoom,userObj)==null)
             userChatRoomRepository.save(userChatRoom);
        // userObj.addChatRoom(chatRoom);
@@ -139,8 +139,8 @@ public class ChatService {
         }
     }
     public void saveGroup(String group,String room){
-        System.out.println("room "+ room);
-        System.out.println("group "+ group);
+      //  System.out.println("room "+ room);
+       // System.out.println("group "+ group);
         Group groups=groupRepository.findByFullname(group);
         List<User> userSet=userRepository.findAllByGroups(groups);
         String name="";
@@ -189,11 +189,7 @@ public class ChatService {
             }
         }
 
-        /*
-        List <ChatRoom> answer=new ArrayList<>();
-        for (int i = 0; i <userChatRoomList.size() ; i++) {
-            answer.add(userChatRoomList.get(i).getChatRoom());
-        }
+       /*
         System.out.println(answer);*/
 
         return chatMessageMap;
@@ -202,9 +198,7 @@ public class ChatService {
 
     public List<ChatRoomFormat> UserRoomTest(String userName) {
         User user=userRepository.findByUsername(userName);
-        // Set<ChatRoom> chatRooms=chatRoomRepository.getAllByUsersContains(user);
         List<UserChatRoom> userChatRoomList=userChatRoomRepository.getAllByUser(user);;
-        //Map<String,Boolean> chatMessageMap=new HashMap<String,Boolean>();
         List<ChatRoomFormat> chatRoomFormat=new ArrayList<>();
         List<Message> messages=new ArrayList<>();
         UserChatRoom userChatRoomprom;
@@ -218,23 +212,17 @@ public class ChatService {
             if (messages.size()>0 && userChatRoomprom.getTime()!=null){
                 ms=messages.get(messages.size()-1);
                 first=LocalDateTime.parse(ms.getDate(),formatter);
-                second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);;
-                //chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second));
+                second=LocalDateTime.parse(userChatRoomprom.getTime(),formatter);
                 chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),first.isAfter(second),ms.getDate()));
             }
             else {
                 if(userChatRoomprom.getChatRoom().getRoomName()!=null)//HH:mm:ss dd.MM.yyyy 00:00:00 01.01.1999
                 chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"00:00:00 01.01.1999"));
-                //chatMessageMap.put(userChatRoomprom.getChatRoom().getRoomName(),false);
+
             }
         }
 
-        /*
-        List <ChatRoom> answer=new ArrayList<>();
-        for (int i = 0; i <userChatRoomList.size() ; i++) {
-            answer.add(userChatRoomList.get(i).getChatRoom());
-        }
-        System.out.println(answer);*/
+
 
         return chatRoomFormat;
     }

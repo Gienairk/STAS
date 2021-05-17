@@ -19,7 +19,7 @@
   <sec:authorize access="isAuthenticated()">
     <h4><a href="/logout">Выйти</a></h4>
   </sec:authorize>
-  <h4><a href="/admin">Пользователи (только админ)</a></h4>
+  <h4><a href="/admin">Кабинет администратора</a></h4>
   <h4><a href="/chat">Чат</a></h4>
 
 </div>

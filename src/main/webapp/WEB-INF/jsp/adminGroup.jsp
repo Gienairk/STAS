@@ -15,18 +15,20 @@
     <input type="hidden" name="action" value="create"/>
     <input name="groupNumber" type="text" required pattern="^[ 0-9]+$" placeholder="Group number"/>
     <input name="coursenumber" type="number" placeholder="coursenumber"/>
-    <input list="department" name="department">
+    <select list="department" name="department">
     <datalist id="department">
       <c:forEach items="${allDepartment}" var="department">
       <option >${department.departmentName}</option>
       </c:forEach>
     </datalist>
-    <input list="postfix" name="postfix">
+    </select>
+    <select list="postfix" name="postfix">
     <datalist id="postfix">
       <c:forEach items="${allPostfix}" var="postfix">
         <option>${postfix.name}</option>
       </c:forEach>
     </datalist>
+    </select>
     <button type="submit">Create</button>
   </form>
 

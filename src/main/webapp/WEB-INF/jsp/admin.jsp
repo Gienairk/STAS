@@ -22,6 +22,8 @@
    <!-- <h4><a href="/admin/adminUserList">Пользователи</a></h4>-->
     <h4><a href="/admin/adminUserListPage/1">Пользователи</a></h4>
     <h4><a href="/admin/registration">Создание пользователя</a></h4>
+    <h4><a href="/admin/resetPassword">Сбросить пароль</a></h4>
+    <h4><a href="/">Главная</a></h4>
 </div>
 </body>
 </html>

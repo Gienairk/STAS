@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class DatafinderService {
     @Autowired
     UserChatRoomRepository userChatRoomRepository;
 
-
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public List<Postfix> allPostfix() {
@@ -81,7 +83,7 @@ public class DatafinderService {
 
     public void createPostfix(String postfixname, Long duration) {
         Postfix postfix=new Postfix(postfixname,duration);
-        System.out.println("postfix "+postfix.toString());
+       // System.out.println("postfix "+postfix.toString());
         postfixRepository.save(postfix);
     }
 
@@ -178,8 +180,7 @@ public class DatafinderService {
 
     public void deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
-            System.out.println("удаляю "+userId);
-            //Optional<User> user=userRepository.findById(userId);
+          //  System.out.println("удаляю "+userId);
             userRepository.deleteById(userId);
         }
     }
@@ -338,6 +339,17 @@ public class DatafinderService {
         List<Group> groupList=groupRepository.findAll();
         for (int i = 0; i <groupList.size() ; i++) {
             upGroup(groupList.get(i));
+        }
+    }
+
+    public void resetPassword(String student, String password) {
+
+        String[] name=student.split(" ");//f s l
+        User user=userRepository.findByFirstNameAndSecondNameAndLastName(name[0],name[1],name[2]);
+        if (user!=null){
+            user.setPassword(bCryptPasswordEncoder.encode(password));
+            userRepository.save(user);
+
         }
     }
 }

@@ -65,30 +65,10 @@ public class ChatAppController {
         messagingTemplate.convertAndSend(format("/topic/newMessage/%s", username), roomName);
     }
 
-   /* @MessageMapping("/chat/{roomId}/addUser")
-    public void addUser(@DestinationVariable String roomId, @Payload Message chatMessage,SimpMessageHeaderAccessor headerAccessor) {
-        String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
-        System.out.println(chatMessage.toString());
-        if (currentRoomId != null) {
-            Message leaveMessage = new Message();
-            leaveMessage.setType(Message.MessageType.LEAVE);
-            leaveMessage.setFromLogin(chatMessage.getFromLogin());
-            addmessage(currentRoomId,chatMessage);
-            messagingTemplate.convertAndSend(format("/topic/%s", currentRoomId), leaveMessage);
-        }
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getFromLogin());
-        addmessage(roomId,chatMessage);
-        messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
-    }*/
 
 
-   /* @SubscribeMapping("/chat/rooms")
-    public List<ChatRoom> listOfRoom()
-    {
 
-        //System.out.println("Rooms: "+rooms.size());
-        return rooms;
-    }*/
+
 
 
     @SubscribeMapping("/chat/{chatRoom}/CreateRoom")
@@ -120,13 +100,6 @@ public class ChatAppController {
         return chatService.getGroup();
     }
 
-    /*@MessageMapping("/chat/rooms")
-    public void addRoom(@Payload ChatRoom chatRoom)
-    {
-        System.out.println("+++++++++++++++++++++++++++++++++++"+chatRoom);
-        chatService.saveRoom(chatRoom);
-        messagingTemplate.convertAndSend("/topic/list", rooms);
-    }*/
 
     @MessageMapping("/chat/rooms/{userName}")
     public void addUserToRoom(@DestinationVariable String userName,@Payload ChatRoom chatRoom){
@@ -146,49 +119,24 @@ public class ChatAppController {
        /* System.out.println("===============");
         System.out.println("userName= "+userName);
         System.out.println("chatRoomname= "+chatRoomName);
-
         System.out.println("===============");*/
         messagingTemplateTest.convertAndSend("/topic/chat/"+userName , chatRoomName);
     }
 
     @MessageMapping("/chat/rooms/{groupName}/addGroup")
     public void addGroupToRoom(@DestinationVariable String groupName,@Payload ChatRoom chatRoom){
-        System.out.println("+++++++++++++++");
+      /*  System.out.println("+++++++++++++++");
         System.out.println(groupName);
         System.out.println(chatRoom.getRoomName());
-        System.out.println("+++++++++++++++");
+        System.out.println("+++++++++++++++");*/
         chatService.saveGroup(groupName,chatRoom.getRoomName());
 
 
     }
 
-    /*@MessageMapping("/chat/{roomId}/leaveuser")
-    public void leaveRoom(@DestinationVariable String roomId, @Payload Message chatMessage,SimpMessageHeaderAccessor headerAccessor)
-    {
-        String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
-        if (currentRoomId != null) {
-            Message leaveMessage = new Message();
-            leaveMessage.setType(Message.MessageType.LEAVE);
-            leaveMessage.setFromLogin(chatMessage.getFromLogin());
-            //addmessage(currentRoomId,chatMessage);
-            messagingTemplate.convertAndSend(format("/topic/%s", currentRoomId), leaveMessage);
-        }
-    }*/
 
-/*
-    private void addmessage(String roomid, Message message) {
-        for(ChatRoom room: rooms)
-        {
-            if(room.getRoomName().equals(roomid))
-            {
-                List<Message> messages = room.getMessages();
-                messages.add(message);
-                room.setMessages(messages);
-                break;
-            }
-        }
-    }
-*/
+
+
     @SubscribeMapping("chat/{roomId}/getPrevious")
     public List<Message> getPreviousMessages(@DestinationVariable String roomId)
     {
@@ -202,27 +150,15 @@ public class ChatAppController {
     @SubscribeMapping("chat/{userName}/getChats")
     public  List<ChatRoomFormat> getUserRoom(@DestinationVariable String userName)
     {
-        /*List<ChatRoom> test= chatService.UserRoom(userName);
-        List<String> name=new ArrayList<>();
-        for (int i = 0; i < test.size(); i++) {
-            name.add(test.get(i).getRoomName());
-        }
-        return name;*/
         List<ChatRoomFormat> chatRoomFormatData=chatService.UserRoomTest(userName);
-            System.out.println(chatRoomFormatData);
-      Collections.sort(chatRoomFormatData);
-       // for (int i = 0; i < chatRoomFormatData.size(); i++) {
-       //     System.out.println(chatRoomFormatData.get(i).toString());
-        //}
-        //Map<String,Boolean> test= chatService.UserRoom(userName);
+            //System.out.println(chatRoomFormatData);
+        Collections.sort(chatRoomFormatData);
         return chatRoomFormatData;
     }
     @SubscribeMapping("chat/{roomId}/getUsers")
     public  List<String> getUserInRoom(@DestinationVariable String roomId)
     {
-
         List<String> ans=chatService.getUsersInChat(roomId);
-
        return ans;
     }
 

@@ -228,6 +228,20 @@ public class AdminController {
         return "ChooseGroup";
     }
 
+    @GetMapping("/admin/resetPassword")
+    public String resetPassword(Model model) {
+        model.addAttribute("allUsers",datafinderService.allUser());
+        return "resetPassword";
+    }
+    @PostMapping("/admin/resetPassword")
+    public String  NewPassword(@RequestParam(required = false, defaultValue = "" ) String students,
+                               @RequestParam(required = false,  defaultValue = "" ) String newPass,
+                               Model model) {
+        if (newPass.equals("")!=true)
+            datafinderService.resetPassword(students,newPass);
+        return "redirect:/admin/resetPassword";
+    }
+
     @PostMapping("/admin/ChooseGroup")
     public String  ChooseGroup(@RequestParam(required = false, defaultValue = "" ) String student,
                                @RequestParam(required = false,  defaultValue = "" ) String group,

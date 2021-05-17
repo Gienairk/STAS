@@ -32,6 +32,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllBySubjects(Subject subject);
 
+    User findByFirstNameAndSecondNameAndLastName(String s, String s1, String s2);
+
     // Page<User> findAll(Pageable pageable);
     //List<User> findAllByChatRooms(ChatRoom chatRoom);
 }
