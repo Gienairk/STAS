@@ -264,7 +264,7 @@ function onPreviousMessage(payload) {
 function newMessageSound(){
     var audio = new Audio();
     audio.src="resources/audio/message.mp3";
-    audio.volume=0.6;
+    audio.volume=0.4;
     audio.autoplay = true;
 }
 function onMessageReceived(payload) {

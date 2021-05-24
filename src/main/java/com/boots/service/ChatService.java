@@ -217,8 +217,10 @@ public class ChatService {
             }
             else {
                 if(userChatRoomprom.getChatRoom().getRoomName()!=null)//HH:mm:ss dd.MM.yyyy 00:00:00 01.01.1999
-                chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"00:00:00 01.01.1999"));
-
+                    if(messages.size()>0)
+                        chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),true,"00:00:00 01.01.1999"));
+                    else
+                        chatRoomFormat.add(new ChatRoomFormat(userChatRoomprom.getChatRoom().getRoomName(),false,"00:00:00 01.01.1999"));
             }
         }
 

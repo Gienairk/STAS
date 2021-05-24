@@ -23,6 +23,9 @@
         <input name="newPass"  placeholder="новый пароль"/>
         <button type="submit">Обновить</button>
     </form>
+    <c:if test="${ err == 1}">
+        <div>Пароль должен быть длиннее 3-х символов</div>
+    </c:if>
 
 
 

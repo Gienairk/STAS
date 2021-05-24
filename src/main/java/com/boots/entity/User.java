@@ -35,9 +35,6 @@ public class User implements UserDetails {
     private Set<Department> departments=new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Subject> subjects=new HashSet<>();
-    /*@ManyToMany(fetch = FetchType.EAGER)
-    private Set<ChatRoom> chatRooms=new HashSet<>();;*/
-
     @OneToMany(mappedBy = "user")
     private Set<UserChatRoom> userChatRooms = new HashSet<UserChatRoom>();
     @Override

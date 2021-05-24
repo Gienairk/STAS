@@ -236,9 +236,12 @@ public class AdminController {
     @PostMapping("/admin/resetPassword")
     public String  NewPassword(@RequestParam(required = false, defaultValue = "" ) String students,
                                @RequestParam(required = false,  defaultValue = "" ) String newPass,
+                               RedirectAttributes redirectAttrs,
                                Model model) {
-        if (newPass.equals("")!=true)
+        if (newPass.length()>2)
             datafinderService.resetPassword(students,newPass);
+        else
+            redirectAttrs.addFlashAttribute("err",1);
         return "redirect:/admin/resetPassword";
     }
 

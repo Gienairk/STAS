@@ -343,13 +343,11 @@ public class DatafinderService {
     }
 
     public void resetPassword(String student, String password) {
-
-        String[] name=student.split(" ");//f s l
+        String[] name=student.split(" ");
         User user=userRepository.findByFirstNameAndSecondNameAndLastName(name[0],name[1],name[2]);
         if (user!=null){
             user.setPassword(bCryptPasswordEncoder.encode(password));
             userRepository.save(user);
-
         }
     }
 }
