@@ -21,11 +21,11 @@ public class Group {
     @ManyToMany(mappedBy = "groups")
     private Set<User> users;
 
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "postfix_id",referencedColumnName ="id")
     private Postfix postfixId;
 
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "department_id" ,referencedColumnName ="id")
     private Department departmentId;
 
@@ -63,9 +63,6 @@ public class Group {
 
     }
     public void upCourse(){
-      /*  String promName=this.fullname;
-        Long prName=Long.parseLong(promName);
-        this.fullname=promName+100;*/
         Long prName=Long.parseLong(this.number);
         this.number=String.valueOf(prName+100);
         String[] postfix=fullname.split("-");

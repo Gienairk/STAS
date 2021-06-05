@@ -418,6 +418,7 @@ function createRoomForStudent(){
     if (teather!='' & room!=''){
         stompClient.subscribe(`/app/chat/${room}/CreateRoom`, getAnswerRoomStudent);
     }
+    CreateRoomforStudent.classList.add('hidden')
    /* var data={
         roomName:roomId,
     };

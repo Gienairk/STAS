@@ -11,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class DatafinderService {
@@ -217,6 +214,8 @@ public class DatafinderService {
         Optional<User> userOptional=userRepository.findById(userId);
         User user=userOptional.get();
         user.getGroups().remove(group);
+       // group.getUsers().remove(user);
+       // groupRepository.save(group);
         userRepository.save(user);
     }
 
@@ -318,27 +317,39 @@ public class DatafinderService {
         else
             groupRepository.save(group);
     }
-    public void upGroup(Group group) {
-        group.upCourse();
-        if (group.getCourseNumber()>group.getPostfixId().getDuration()) {
+
+    public void upGroup(Group gr) {
+        Group group = gr;
+        if (group.getCourseNumber()+1>group.getPostfixId().getDuration()) {
             List<User> userList=new ArrayList<>(group.getUsers());
             Long id;
             for (int i = 0; i <userList.size() ; i++) {
                 id=userList.get(i).getId();
                 deleteUserFromGroups(id);
-                //deleteUserFromChats(id);
-               // deleteUser(id);
             }
+            System.out.println("---------------");
+            System.out.println(group);
+            System.out.println(group.getPostfixId().toString());
+            System.out.println(group.getDepartmentId().toString());
             groupRepository.delete(group);
+           // groupRepository.flush();
         }
-        else
+        else{
+            group.upCourse();
+            System.out.println("++++++++++++++++++");
+            System.out.println(group);
+            System.out.println(group.getPostfixId().toString());
+            System.out.println(group.getDepartmentId().toString());
             groupRepository.save(group);
+           // groupRepository.saveAndFlush(group);
+        }
     }
 
     public void upAllGroup() {
         List<Group> groupList=groupRepository.findAll();
         for (int i = 0; i <groupList.size() ; i++) {
             upGroup(groupList.get(i));
+            //groupRepository.flush();
         }
     }
 

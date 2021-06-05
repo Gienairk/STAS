@@ -34,12 +34,7 @@ public class AdminController {
         return "admin";
     }
 
-    /*
-    @GetMapping("/admin/adminUserList")
-    public String userList(Model model) {
-        model.addAttribute("allUsers", userService.allUsers());
-        return "adminUserList";
-    }*/
+
 
 
     @RequestMapping("/admin/SubjectPage/{pageNo}")
@@ -49,11 +44,6 @@ public class AdminController {
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("subjectList",subjectList);
-        /*Page<User> page=userService.userList(pageNo,pageSize);
-        List<User> userList=page.getContent();
-        model.addAttribute("currentPage",pageNo);
-        model.addAttribute("totalPages",page.getTotalPages());
-        model.addAttribute("userList",userList);*/
         return "subjectPage";
     }
 
@@ -110,19 +100,11 @@ public class AdminController {
         if (action.equals("find")){
             List<User>users=datafinderService.findUserBySomeName(name,surname,patronymic);
             redirectAttrs.addFlashAttribute("users",users);
-          //  redirectAttrs.addFlashAttribute("haveSomeUsers",1);
         }
         return "redirect:/admin/adminUserListPage/"+pageNo;
-        //return new RedirectView("/admin/adminUserListPage/"+pageNo);
-    }
-    /*
-    @RequestMapping(value = "/admin/Groups/{id}",method = RequestMethod.GET)
-    public String getGroup(Model model, @PathVariable("id") Long id) {
-        Group group=datafinderService.findGroupbyId(id).orElseThrow(()-> new NullPointerException("в бд нет записи с данным id"));
-        model.addAttribute("Group", group);
-        return "Group";
 
-    }*/
+    }
+
 
     @PostMapping("/admin/adminPostfix")
     public String  Postfix(@RequestParam(required = false, defaultValue = "" ) Long postfixId,
@@ -250,7 +232,10 @@ public class AdminController {
                                @RequestParam(required = false,  defaultValue = "" ) String group,
                                Model model) {
         User user=datafinderService.findStudentbyfullname(student);
+        System.out.println("+++++++++++++++++++++++++++");
+        System.out.println(user);
         Group group1=datafinderService.findGroupbyFullName(group);
+        System.out.println(group1);
         user.addGroup(group1);
         datafinderService.createUser(user);
         return "redirect:/admin/ChooseGroup";
@@ -317,23 +302,7 @@ public class AdminController {
         }*/
         return "redirect:/admin/GroupCreate";
     }
-/*
-    @PostMapping("/admin/adminUserList")
-    public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
-                              @RequestParam(required = true, defaultValue = "" ) String action,
-                              Model model) {
-        if (action.equals("delete")){
-            userService.deleteUser(userId);
-        }
-        return "/admin/adminUserList";
-    }*/
-/*
-    @GetMapping("/admin/Groups")
-    public String allGroups(Model model) {
-        model.addAttribute("allGroup", datafinderService.allGroup());
-        return "Groups";
-    }
-*/
+
 
     @RequestMapping("/admin/PostfixPage/{pageNo}")
     public String allPostfix(@PathVariable (value="pageNo") int pageNo,Model model) {
@@ -385,6 +354,7 @@ public class AdminController {
         redirectAttrs.addFlashAttribute("groupRez",groupRez);
         }
         if (action.equals("upAllGroup")){
+
             datafinderService.upAllGroup();
         }
         return "redirect:/admin/Groups/"+pageNo;
@@ -419,10 +389,5 @@ public class AdminController {
 
         return "redirect:/admin/Groups/Group/"+id;
     }
-/*
-    @GetMapping("/admin/adminUserList/gt/{userId}")
-    public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.usergtList(userId));
-        return "/admin/adminUserList";
-    }*/
+
 }

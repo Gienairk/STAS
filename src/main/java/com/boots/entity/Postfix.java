@@ -24,6 +24,15 @@ public class Postfix {
     public Postfix() {
     }
 
+    @Override
+    public String toString() {
+        return "Postfix{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                '}';
+    }
+
     public Postfix(String name, Long duration) {
         this.name = name;
         this.duration = duration;

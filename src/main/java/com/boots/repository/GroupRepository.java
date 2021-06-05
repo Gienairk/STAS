@@ -18,4 +18,5 @@ public interface GroupRepository extends JpaRepository<Group,Long> {
     List<Group> findAllBySubjects(Subject subject);
     List<Group>findAllByFullname(String string);
     List<Group>getAllByFullnameContains(String string);
+
 }

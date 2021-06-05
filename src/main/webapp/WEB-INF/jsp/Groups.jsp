@@ -20,7 +20,8 @@
     </div>
     <table>
         <thead>
-        <th>group</th>
+        <th>группа</th>
+        <th>курс</th>
         </thead>
     <c:if test="${fn:length(groupRez)!=0}">
         <c:forEach items="${groupRez}" var="SG">
@@ -46,10 +47,11 @@
     <div>
         <form action="${pageContext.request.contextPath}/admin/Groups/${currentPage}"   method="post">
             <input type="hidden" name="action" value="upAllGroup"/>
-            <button type="submit" onclick="return confirm('повысить курс всех групп, при этом группы и студенты которые выпустились будут удалены, если вы хотите оставить данные студента в базе, то в начале удалите его из группы  ?')">Повысить курс всех групп</button>
+            <button type="submit" onclick="return confirm('повысить курс всех групп, если она выпускаются её данные будут удалены ? ')">Повысить курс всех групп</button>
         </form>
     </div>
     </c:if>
+    <a href="/">Главная</a></div>
 </div>
 </body>
 </html>

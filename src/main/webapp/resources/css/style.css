@@ -292,6 +292,7 @@ ul {
     background: #F2F5F8;
 }
 .button{
+    margin-top: 20px;
     color: #94C2ED;
     font-size: 14px;
     border: none;
