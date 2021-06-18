@@ -209,6 +209,22 @@ function getAnswerRoom(payload){
     }
 }
 
+/*
+function getAnswerRoom(payload){
+    var message = JSON.parse(payload.body);
+    console.log(message)
+    if (message){
+        console.log("getAnswerRoom "+roomId)
+        let promise = new Promise(function(resolve, reject) {
+            updateRoomList(userName,roomName.value.trim())
+            resolve(enterRoom(roomName.value.trim()))
+    })}
+
+    else{
+        toastr.error("Такой чат уже есть ")
+    }
+}
+*/
 function enterRoom(newRoomId){
     var data={
         roomName:newRoomId,
